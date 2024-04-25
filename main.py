@@ -1,20 +1,18 @@
+from flask import Flask, Response, send_file
 import game.database as database
 import game.logic as game
 
 
-def main():
-    err = database.create_database_connection()
-    if err:
-        print(f"Error occurred while creating new database connection: {err}")
-    else:
-        print("Database connection established.")
-        # start the app
-        database.create_database_connection()
-        game.intro()
-        game.menu()
-        game.outro()
+app = Flask(__name__)
 
+@app.route("/")
+def serve_web():
+    return send_file("webroot/index.html")
 
 if __name__ == "__main__":
-    main()
+    try:
+        database.create_database_connection()
+        app.run(use_reloader=True, host="127.0.0.1", port=3333)
+    except Exception as error:
+        print(f"Something went wrong: {error}")
 
