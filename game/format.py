@@ -1,10 +1,31 @@
-# Player dictionary structure
-def player_structure(player_name):
-    return { "name": player_name, "score": False, "co2": 0, "location": [60.3172, 24.963301], "parcels_picked": [], "parcels_delivered": [], "gameover": False }
+# Parcel object
+class Parcel:
+    def __init__(self, item, co2_item, heft, info, destination_airport, destination_country, location):
+        self.item = item
+        self.co2_item = co2_item
+        self.heft = heft
+        self.info = info
+        self.destination_airport = destination_airport
+        self.destination_country = destination_country
+        self.location = location
+        self.delivered = False
 
 
-# Parcel dictionary structure (not defined, decreed by the database itself!)
-#parcel_structure = 
+# Player object
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.score = 0
+        self.location = [60.3172, 24.963301]
+        self.parcels_picked = []
+        self.gameover = False
+
+    def add_parcel(self, parcel):
+        self.parcels_picked.append(parcel)
+
+    def deliver_parcel(self, parcel, aircraft):
+        parcel.delivered = True
+        self.location = parcel.location
 
 
 # Item heft classes
