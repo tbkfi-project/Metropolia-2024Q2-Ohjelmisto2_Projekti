@@ -1,7 +1,12 @@
+import os
+from dotenv import load_dotenv
+from pathlib import Path
 from flask import Flask, send_file
 import game.database as database
 import game.logic as game
 
+dotenv_path = Path("./config/.env")
+load_dotenv(dotenv_path=dotenv_path)
 
 app = Flask(__name__)
 
@@ -14,5 +19,5 @@ if __name__ == "__main__":
     if db_error:
         print(f"ERROR: DB-CONNECTION, {db_error}")
     else:
-        app.run(use_reloader=True, host="127.0.0.1", port=3333)
+        app.run(use_reloader=True, host=os.getenv("FLASK_BIND"), port=os.getenv("FLASK_PORT"))
 
