@@ -38,6 +38,14 @@
     }
 }
 
+.screen {
+    display: none;
+}
+
+.active-screen {
+    display: block;
+}
+
 #map {
     height: 50em;
 }
