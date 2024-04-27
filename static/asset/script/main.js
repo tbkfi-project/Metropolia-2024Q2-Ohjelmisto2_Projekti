@@ -1,6 +1,7 @@
 "use strict";
 
 import * as Map from './map.js'
+import * as Screen2 from './screen2.js'
 
 /**
  * Change displayed screen
@@ -18,6 +19,7 @@ function changeScreen(screenID) {
             break;
 
         case 1:
+            Screen2.clearPlayerList();
             document.querySelector('#screen2').classList.add('active-screen');
             break;
 
@@ -37,4 +39,15 @@ function changeScreen(screenID) {
 
 document.querySelector('#newgame-button').addEventListener('click', () => {
     changeScreen(1);
-})
+});
+
+document.querySelector('#add-new-player').addEventListener('click', () => {
+    const playerNameInputField = document.querySelector('#new-player-name-input');
+    const newPlayerName = playerNameInputField.value;
+    playerNameInputField.value = '';
+    Screen2.addNewPlayerToList(newPlayerName);
+});
+
+document.querySelector('#delete-player').addEventListener('click', () => {
+    Screen2.deletePlayersFromList();
+});

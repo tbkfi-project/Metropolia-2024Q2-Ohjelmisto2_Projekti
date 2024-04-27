@@ -29,14 +29,24 @@
   <main>
     <div id="screen1" class="screen active-screen">
       <div class="container">
-        <div class="buttons">
+        <div class="screen1-buttons">
           <button id="newgame-button">Aloita uusi peli</button>
           <button id="highscore-button">Pistetaulukko</button>
         </div>
       </div>
     </div>
     <div id="screen2" class="screen">
-      <p>Screen 2</p>
+      <div class="container">
+        <h2>Pelaajat</h2>
+        <div class="screen2-player-container">
+          <ul id="screen2-player-list"></ul>
+          <input id="new-player-name-input" name="new-player-name" type="text" placeholder="Pelaajan nimi">
+          <div class="screen2-buttons">
+            <button id="add-new-player">Lisää</button>
+            <button id="delete-player">Poista valitut</button>
+          </div>
+        </div>
+      </div>
     </div>
     <div id="screen3" class="screen">
       <section class="map-section">
