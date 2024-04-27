@@ -1,0 +1,7 @@
+#map {
+    height: 50em;
+}
+
+img.player-marker {
+    filter: hue-rotate(120deg);
+}
