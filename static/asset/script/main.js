@@ -29,3 +29,12 @@ function changeScreen(screenID) {
             break;
     }
 }
+
+
+/*-----------------*/
+/* Event listeners */
+/*-----------------*/
+
+document.querySelector('#newgame-button').addEventListener('click', () => {
+    changeScreen(1);
+})
