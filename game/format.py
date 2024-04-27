@@ -19,14 +19,19 @@ class Player:
         self.location = [60.3172, 24.963301]
         self.parcels_picked = []
         self.gameover = False
+        self.distance_traveled = 0
+        self.time_traveled = 0
+        self.co2_produced = 0
 
     def add_parcel(self, parcel):
         self.parcels_picked.append(parcel)
 
-    def deliver_parcel(self, parcel, aircraft):
-        parcel.delivered = True
-        self.location = parcel.location
 
+class HighscoreValue:
+    def __init__(self,gameID,name,score):
+        self.gameID = gameID
+        self.name = name
+        self.score = score
 
 # Item heft classes
 heft_classes = {1:(0.1,1), 2:(1,3), 3:(3,10)}
