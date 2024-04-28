@@ -3,20 +3,18 @@
 import * as Map from './map.js'
 import * as Menu from './menu.js'
 
-
-
-/*	LOCATION			NAME					INFO
- *	menu-main			new game				changes menu panel into "selection", where players are added.
- *	menu-main			hiscore					changes menu panel into "hiscores", where past leaderboard scores can be viewed.
+/*  LOCATION            NAME                    INFO
+ *  menu-main           new game                changes menu panel into "selection", where players are added.
+ *  menu-main           hiscore                 changes menu panel into "hiscores", where past leaderboard scores can be viewed.
  *
- *	menu-selection		add player				enables the button which adds a player to the <players> list.
- *	!menu-selection		start game				enables the button which starts the new game for <players>.
- *	!menu-selection		back					enables the button which goes back to main menu.
+ *  menu-selection      add player              enables the button which adds a player to the <players> list.
+ *  !menu-selection     start game              enables the button which starts the new game for <players>.
+ *  !menu-selection     back                    enables the button which goes back to main menu.
  *
  *  !menu-play           next player turn        enables the button which begins the next player's turn.
  *  !menu-play           select parcel           enables the buttons for each parcel option to add them to their delivery list. 
  *  !menu-play           deliver parcel          enables the buttons for each deliverable parcel (also includes transport method listeners!)
- *  
+ *
  *
  *
 */
