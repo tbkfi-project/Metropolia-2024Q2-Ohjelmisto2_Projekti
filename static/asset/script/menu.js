@@ -68,11 +68,23 @@ export function playerListRemoveEntry(playerName) {
     }
 }
 
+export async function gameStartNew(playerList) {
+    let responseJSON;
+    
+    try {
+        const data = encodeURIComponent(JSON.stringify(playerList));
+        const response = await fetch("http://127.0.0.1:3333/game/new?players=" + data);
+        responseJSON = await response.json();
+    } catch (error) {
+        console.log(error);
+    }
+    return responseJSON;
+}
 
 export function parcelSelect(playerName, parcelIndex) {
-    
+    // TODO
 }
 
 export function parcelDeliver(playerName, parcelIndex, deliveryMethod) {
-    
+    // TODO
 }
