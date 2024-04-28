@@ -43,7 +43,7 @@ document.querySelector(".ButtonSelectionPlayerAdd").addEventListener('click', ()
         console.log("error: field is empty!");
         return false;
     } else {
-        Menu.playersAdd(playerName);
+        Menu.playerListAddEntry(playerName);
         field.value = "";
         return true;
     }
