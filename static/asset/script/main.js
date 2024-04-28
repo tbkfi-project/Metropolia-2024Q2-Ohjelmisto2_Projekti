@@ -1,53 +1,61 @@
 "use strict";
 
 import * as Map from './map.js'
-import * as Screen2 from './screen2.js'
+import * as Menu from './menu.js'
 
-/**
- * Change displayed screen
- * @param {Number} screenID ID of wanted screen. (0 = '#screen1', 1 = '#screen2', 2 = '#screen3')
- */
-function changeScreen(screenID) {
-    const activeScreens = document.querySelectorAll('.active-screen');
-    activeScreens.forEach((screen) => {
-        screen.classList.remove('active-screen');
-    });
 
-    switch (screenID) {
-        case 0:
-            document.querySelector('#screen1').classList.add('active-screen');
-            break;
 
-        case 1:
-            Screen2.clearPlayerList();
-            document.querySelector('#screen2').classList.add('active-screen');
-            break;
+/*	LOCATION			NAME					INFO
+ *	menu-main			new game				changes menu panel into "selection", where players are added.
+ *	menu-main			hiscore					changes menu panel into "hiscores", where past leaderboard scores can be viewed.
+ *
+ *	menu-selection		add player				enables the button which adds a player to the <players> list.
+ *	!menu-selection		start game				enables the button which starts the new game for <players>.
+ *	!menu-selection		back					enables the button which goes back to main menu.
+ *
+ *  !menu-play           next player turn        enables the button which begins the next player's turn.
+ *  !menu-play           select parcel           enables the buttons for each parcel option to add them to their delivery list. 
+ *  !menu-play           deliver parcel          enables the buttons for each deliverable parcel (also includes transport method listeners!)
+ *  
+ *
+ *
+*/
 
-        case 2:
-            document.querySelector('#screen3').classList.add('active-screen');
-            break;
 
-        default:
-            break;
+const menuStart = document.querySelector("#menuStart");
+const menuSelection = document.querySelector("#menuSelection");
+const menuPlay = document.querySelector("#menuPlay");
+
+
+// MENU, MAIN: NEW GAME
+document.querySelector('.ButtonMenuStartNew').addEventListener('click', () => {
+    menuStart.setAttribute("hidden", "");
+    menuSelection.removeAttribute("hidden");
+});
+
+// MENU, MAIN: HISCORE
+
+
+// MENU, SELECTION: ADD PLAYER
+document.querySelector(".ButtonSelectionPlayerAdd").addEventListener('click', () => {
+    const field = document.querySelector(".FieldSelectionPlayerAdd");
+    const playerName = field.value.trim(); // .trim() -> removes leading&trailing whitespaces.
+    
+    if (playerName == "") {
+        console.log("error: field is empty!");
+        return false;
+    } else {
+        Menu.playersAdd(playerName);
+        field.value = "";
+        return true;
     }
-}
-
-
-/*-----------------*/
-/* Event listeners */
-/*-----------------*/
-
-document.querySelector('#newgame-button').addEventListener('click', () => {
-    changeScreen(1);
 });
 
-document.querySelector('#add-new-player').addEventListener('click', () => {
-    const playerNameInputField = document.querySelector('#new-player-name-input');
-    const newPlayerName = playerNameInputField.value;
-    playerNameInputField.value = '';
-    Screen2.addNewPlayerToList(newPlayerName);
+// MENU, SELECTION: START GAME
+
+// MENU, SELECTION: BACK
+document.querySelector('.ButtonSelectionBack').addEventListener('click', () => {
+    menuSelection.setAttribute("hidden", "");
+    menuStart.removeAttribute("hidden");
 });
 
-document.querySelector('#delete-player').addEventListener('click', () => {
-    Screen2.deletePlayersFromList();
-});
