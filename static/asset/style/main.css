@@ -1,37 +1,154 @@
 :root {
-  --font-basic: Rosario;
-  --font-special: Nunito;
-  --font-mono: SourceCodePro;
+    --font-basic: 'Rosario', sans-serif;
+    --font-special: 'Nunito', sans-serif;
+    --font-mono: 'SourceCodePro', monospace;
 
-  --colour-white: #FFFFFF;
-  --colour-black: #000000;
+    --colour-white: #FFFFFF;
+    --colour-black: #000000;
+    --colour-grey: #303030;
 
-  --colour-primary: ChangeMe;
-  --colour-secondary: ChangeMe;
-  --colour-tertiary: ChngeMe;
+    --colour-primary: #007bff;
+    --colour-secondary: #6c757d;
+    --colour-tertiary: #28a745;
+}
+
+[hidden] {
+    display: none;
 }
 
 @font-face {
-  font-family: "Nunito";
-  font-style: normal;
-  src: url("../font/Nunito-VariableFont.woff2") format("woff2");
-  font-display: swap;
+    font-family: 'Nunito';
+    font-style: normal;
+    src: url("../font/Nunito-VariableFont.woff2") format("woff2");
+    font-display: swap;
 }
 @font-face {
-  font-family: "Rosario";
-  font-style: normal;
-  src: url("../font/Rosario-VariableFont.woff2") format("woff2");
-  font-display: swap;
+    font-family: 'Rosario';
+    font-style: normal;
+    src: url("../font/Rosario-VariableFont.woff2") format("woff2");
+    font-display: swap;
 }
 @font-face {
-  font-family: "SourceCodePro";
-  font-style: normal;
-  src: url("../font/SourceCodePro-VariableFont.woff2") format("woff2");
-  font-display: swap;
+    font-family: 'SourceCodePro';
+    font-style: normal;
+    src: url("../font/SourceCodePro-VariableFont.woff2") format("woff2");
+    font-display: swap;
 }
 
-@media screen and (max-width: 1280px) {
-  #container {
-    width: 100%;
-  }
+button {
+  width: 8rem;
+  height: 2rem;
+  
+  margin: 0.25rem;
+  padding: 0.5rem;
+
+  font-family: var(--font-special);
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  transition: background-color 0.75s ease;
+}
+.playersRemove {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 30px;
+  height: 30px;
+
+  background-color: grey;
+}
+.playersRemove:hover {
+  background-color: red;
+}
+button:hover {
+  background-color: var(--colour-tertiary);
+}
+
+html {
+  image-rendering: -webkit-optimize-contrast;
+  background-color: rgba(0,0,0,1);
+}
+body {
+}
+main {
+  width: 100%;
+  height: 100%;
+}
+#container {
+  width: 100%;
+  min-width: 600px;
+  max-width: 100vw;
+  height: 100vh;
+  
+  background-color: rgba(255,0,0,0);
+}
+article {
+}
+section {
+}
+header {
+  z-index: auto;
+  width: 100%;
+  height: 3rem;
+  
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background-color: var(--colour-primary);
+  color: var(--colour-white);
+}
+header ul {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+}
+
+#screen {
+  display: flex;
+  min-width: 100%;
+  min-height: 100%;
+
+  justify-content: center;
+  align-items: center;
+  background-color: var(--colour-white);
+}
+#map {
+  display: flex;
+  min-width: 100%;
+  min-height: 100%;
+
+  justify-content: center;
+  align-items: center;
+
+  background-color: green;
+}
+#menuStart, #menuSelection, #menuPlay {
+  z-index: 1;
+  position: absolute;
+  
+  border-radius: 1rem;
+  padding: 2rem;
+  
+  background-color: rgba(48,48,48, 0.85);
+  color: var(--colour-white);
+}
+#menuStart {
+  width: 60vw;
+  max-width: 900px;
+  height: 50vh;
+  max-height: 450px;
+  min-height: 200px;
+}
+#menuStart button {
+  width: 12rem;
+  height: 4rem;
+  margin: 0.5rem;
+}
+#menuSelection {
+  width: 80vw;
+  height: 80vh;
+}
+#menuPlay {
 }

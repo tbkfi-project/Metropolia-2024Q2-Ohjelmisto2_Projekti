@@ -1,21 +1,62 @@
 <!DOCTYPE HTML>
 <html lang="en">
-
 <head>
+  <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self'">-->
   <title>Pakettipilotti</title>
   <meta charset="utf-8">
-  <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self'">-->
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
   <meta name="author" content="">
   <meta name="description" content="">
+  <link rel="icon" type="image/x-icon" href="/static/asset/favicon.svg">
   <link href="/static/asset/style/reset.css" rel="stylesheet">
   <link href="/static/asset/style/main.css" rel="stylesheet">
-  <script src="/static/asset/script/main.js" defer></script>
-  <meta name="description" content="Toimita paketteja ympäri maailman!">
-  <link rel="icon" type="image/x-icon" href="asset/favicon.svg">
+  <script src="/static/asset/script/main.js" type="module" defer></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
 </head>
-
 <body>
-  <div id="container">
-  </div>
+  <div id=container>
+    <header id="applicationPanel">
+      <ul>
+        <li>LOGO-IMG</li>
+        <li>Pakettipilotti</li>
+        <li>GameVersion</li>
+        <li>BackendAliveIndicator</li>
+      </ul>
+    </header>
+  <main>
+  <article id="screen">
+	  <section id="map">
+      <div class="world"><p>MAPMAPMAP</p></div>
+      <div class="indicator-time" hidden></div>
+      <div class="indicator-players" hidden>
+        <h3>pelaajat</h3>
+          <ul><ul>
+          </div>
+    </section>
+    <section id="menuStart">
+      <h2>Päävalikko</h2>
+      <ul>
+        <li><button class="ButtonMenuStartNew" >uusi peli</button></li>
+        <li><button class="ButtonMenuStartHiscore">pisteet</button></li>
+      </ul>
+    </section>
+    <section id="menuSelection" hidden>
+      <ul>
+        <li>
+          <input class="FieldSelectionPlayerAdd" name="playerName" type="text" placeholder="pelaajan nimi">
+          <button class="ButtonSelectionPlayerAdd">Lisää pelaaja</button>
+        </li>
+      </ul>
+      <ul class="players"></ul>
+      <ul>
+        <li><button class="ButtonSelectionStart">aloita</button></li>
+        <li><button class="ButtonSelectionBack">palaa takaisin</button></li>
+      </ul>
+    </section>
+    <section id="menuPlay" hidden>
+      <h2> <!-- Current Objective --></h2>
+      <ul></ul>
+    </section>
+  </main>
 </body>
