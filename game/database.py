@@ -173,3 +173,24 @@ def fetch_player_highscores_from_db(count: int) -> list | DB_error:
 
     except DB_error as error:
         return error
+
+
+def connection_check() -> bool | DB_error:
+    """
+    Checks if the connection to the database is working
+
+    :returns: boolean
+    """
+
+    sql = "SELECT MAX(game_id) FROM highscore"
+
+    cursor = connection.cursor()
+
+    try:
+        cursor.execute(sql)
+        result = cursor.fetchone()
+
+        return True
+
+    except DB_error as error:
+        return False

@@ -112,3 +112,7 @@ def is_time_over(end_time, added_time):
 def set_end_time(time_limit):
     endtime = get_time() + time_limit
     return endtime
+
+def check_connection():
+    connected = database.connection_check()
+    return connected
