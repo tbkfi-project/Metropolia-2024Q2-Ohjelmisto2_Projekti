@@ -1,19 +1,6 @@
 'use strict';
 
-/*  NAME                        TYPE                INFO
- *  players                     array               contains player information for the current game.
- *
- *  playerListAddEntry()        function            adds a player to <players>, expects STRING.
- *  playerListRemoveEntry()     function            removes a player from <players>, expects <player.name> STRING.
- *
- *  parcelListAddEntry()        function            add parcel to active player's delivery list.
- *  parcelListDeliverEntry()    function            add parcel to active player's delivered list and do required calculations.
- *
- *
- *
-*/
-
-let players = [];
+export const players = [];
 
 export function playerListAddEntry(playerName) {
 	const playerList = document.querySelector('.players');
@@ -43,7 +30,7 @@ export function playerListAddEntry(playerName) {
         playerList.appendChild(elementListItem);
         
         players.push(playerName);
-		console.log(`success: added ${playerName} to list.`);
+		console.log(`success: added ${playerName} to list.`, players);
 		return true;
     }
 }
@@ -72,12 +59,15 @@ export async function gameStartNew(playerList) {
     let responseJSON;
     
     try {
+        //console.log(playerList);
         const data = encodeURIComponent(JSON.stringify(playerList));
+        //console.log(data);
         const response = await fetch("http://127.0.0.1:3333/game/new?players=" + data);
         responseJSON = await response.json();
     } catch (error) {
         console.log(error);
     }
+    //console.log(responseJSON);
     return responseJSON;
 }
 

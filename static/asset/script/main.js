@@ -2,6 +2,7 @@
 
 import * as Map from './map.js'
 import * as Menu from './menu.js'
+import { players } from './menu.js';
 
 // UI references.
 const applicationPanel = document.querySelector("#applicationPanel");
@@ -260,13 +261,16 @@ function uiPlayerSelection() {
             field.value = "";
         }
     });
-
+    
     document.querySelector(".ButtonSelectionStart").addEventListener("click", async () => {
-        gameData = await Menu.gameStartNew();
+        gameData = await Menu.gameStartNew(players);
         console.log(gameData);
     });
     
-    document.querySelector('.ButtonSelectionBack').addEventListener('click', uiMainMenu);
+    document.querySelector('.ButtonSelectionBack').addEventListener('click', () => {
+        players.splice(0);
+        uiMainMenu();
+    });
 
     // Style DOM elements.
     Object.assign(elementSection.style, {
