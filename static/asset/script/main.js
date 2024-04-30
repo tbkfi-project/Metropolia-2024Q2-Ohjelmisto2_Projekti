@@ -5,6 +5,7 @@ import * as Menu from './menu.js'
 import { players } from './menu.js';
 
 // UI references.
+const jsCheck = document.querySelector("#JavaScriptCheck");
 const applicationPanel = document.querySelector("#applicationPanel");
 const applicationScreen = document.querySelector("#applicationScreen");
 const uiMap = document.querySelector("#map");
@@ -15,6 +16,7 @@ let gameData;
 
 
 // Initialise Application
+jsCheck.remove();
 startApplicationPanel();
 startApplicationScreen();
 setInterval(backendPing, 200000);
