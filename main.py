@@ -91,6 +91,11 @@ def endpoint_game(function_name):
             json_body = {"start_time": turn_start_time,"end_time": turn_end_time, "time_limit": time_limit}
             return Response(response=json.dumps(json_body), status=200, mimetype="application/json")
 
+        case "check_connection":
+            connected = game.functions.check_connection()
+            json_body = {"connected": connected}
+            return Response(response=json.dumps(json_body), status=200, mimetype="application/json")
+
         case _:
             return Response(status=404)
 
