@@ -19,6 +19,7 @@ let gameData;
 jsCheck.remove();
 startApplicationPanel();
 startApplicationScreen();
+Map.show();
 setInterval(backendPing, 200000);
 
 
@@ -54,18 +55,18 @@ function uiPanel() {
     applicationPanelList.setAttribute("id", "applicationPanelList");
 
     applicationPanel.appendChild(applicationPanelList);
-    
-    
+
+
     const elementListItem1 = document.createElement("li");
     elementListItem1.setAttribute("id", "GameLogo");
     const elementListItem1Img = document.createElement("img");
     elementListItem1Img.setAttribute("src", "/some/image.avif");
     elementListItem1Img.setAttribute("alt", "Pakettipilotti logo image.");
-    
+
     elementListItem1.appendChild(elementListItem1Img);
     applicationPanelList.appendChild(elementListItem1);
 
-    
+
     const elementListItem2 = document.createElement("li");
     elementListItem2.setAttribute("id", "GameName");
     const elementListItem2Paragraph = document.createElement("p");
@@ -73,17 +74,17 @@ function uiPanel() {
 
     elementListItem2.appendChild(elementListItem2Paragraph);
     applicationPanelList.appendChild(elementListItem2);
-    
-    
-    const elementListItem3 = document.createElement("li");   
+
+
+    const elementListItem3 = document.createElement("li");
     elementListItem3.setAttribute("id", "GameVersion");
     const elementListItem3Paragraph = document.createElement("p");
     elementListItem3Paragraph.textContent = `${versionNumber}`;
 
     elementListItem3.appendChild(elementListItem3Paragraph);
     applicationPanelList.appendChild(elementListItem3);
-    
-    
+
+
     const elementListItem4 = document.createElement("li");
     elementListItem4.setAttribute("id", "BackendStatus");
     const elementListItem4Paragraph = document.createElement("p");
@@ -118,12 +119,12 @@ function uiMainMenu() {
     const elementSectionHeading = document.createElement("h2");
     elementSectionHeading.textContent = "Päävalikko";
     const elementSectionUnorderedList = document.createElement("ul");
-    
+
     elementSection.appendChild(elementSectionHeading);
     elementSection.appendChild(elementSectionUnorderedList);
     uiInterface.appendChild(elementSection);
-    
-    
+
+
     const elementListItem1 = document.createElement("li");
     const elementButton1 = document.createElement("button");
     elementButton1.textContent = "uusi peli";
@@ -132,7 +133,7 @@ function uiMainMenu() {
     elementListItem1.appendChild(elementButton1);
     elementSectionUnorderedList.appendChild(elementListItem1);
 
-    
+
     const elementListItem2 = document.createElement("li");
     const elementButton2 = document.createElement("button");
     elementButton2.textContent = "pisteet";
@@ -143,7 +144,7 @@ function uiMainMenu() {
 
     // Add DOM Eeventlisteners.
     elementButton1.addEventListener('click', uiPlayerSelection);
-    elementButton2.addEventListener('click', () => {console.log("TODO")} );
+    elementButton2.addEventListener('click', () => { console.log("TODO") });
 
     // Style DOM elements.
     Object.assign(elementSection.style, {
@@ -201,12 +202,12 @@ function uiPlayerSelection() {
     const elementHeading1 = document.createElement("h2");
     elementHeading1.textContent = "Liity peliin";
     const elementUnorderedList1 = document.createElement("ul");
-    
+
     elementSection.appendChild(elementHeading1);
     uiInterface.appendChild(elementSection);
     elementSection.appendChild(elementUnorderedList1);
-    
-    
+
+
     const elementListItem1 = document.createElement("li");
     const elementInput = document.createElement("input");
     elementInput.setAttribute("name", "playerName");
@@ -215,8 +216,8 @@ function uiPlayerSelection() {
 
     elementListItem1.appendChild(elementInput);
     elementUnorderedList1.appendChild(elementListItem1);
-    
-    
+
+
     const elementListItem2 = document.createElement("li");
     const elementButton1 = document.createElement("button");
     elementButton1.textContent = "lisää pelaaja";
@@ -225,7 +226,7 @@ function uiPlayerSelection() {
     elementListItem2.appendChild(elementButton1);
     elementUnorderedList1.appendChild(elementListItem2);
 
-    
+
     const elementListItem3 = document.createElement("li");
     const elementButton2 = document.createElement("button");
     elementButton2.textContent = "aloita peli";
@@ -234,28 +235,28 @@ function uiPlayerSelection() {
     elementListItem3.appendChild(elementButton2);
     elementUnorderedList1.appendChild(elementListItem3);
 
-    
+
     const elementListItem4 = document.createElement("li");
     const elementButton3 = document.createElement("button");
     elementButton3.textContent = "palaa valikkoon";
     elementButton3.setAttribute("class", "ButtonSelectionBack");
-    
+
     elementListItem4.appendChild(elementButton3);
     elementUnorderedList1.appendChild(elementListItem4);
 
-    
+
     const elementUnorderedList2 = document.createElement("ul");
     const elementHeading2 = document.createElement("h3");
     elementHeading2.textContent = "Pelaajalista";
-    
+
     elementUnorderedList2.setAttribute("class", "players");
-    elementSection.appendChild(elementUnorderedList2);  
+    elementSection.appendChild(elementUnorderedList2);
 
     // Add DOM Eeventlisteners.
     document.querySelector(".ButtonSelectionPlayerAdd").addEventListener('click', () => {
         const field = document.querySelector(".FieldSelectionPlayerAdd");
         const playerName = field.value.trim(); // .trim() -> removes leading & trailing whitespaces.
-        
+
         if (playerName == "") {
             console.log("error: field is empty!");
         } else {
@@ -263,7 +264,7 @@ function uiPlayerSelection() {
             field.value = "";
         }
     });
-    
+
     document.querySelector(".ButtonSelectionStart").addEventListener("click", async () => {
         try {
             gameData = await Menu.gameStartNew(players);
@@ -272,7 +273,7 @@ function uiPlayerSelection() {
             console.log(error);
         }
     });
-    
+
     document.querySelector('.ButtonSelectionBack').addEventListener('click', () => {
         players.splice(0); // clear <players> before navigating back.
         uiMainMenu();
@@ -299,7 +300,7 @@ function uiPlayerSelection() {
         fontSize: '3rem'
     });
 
-        Object.assign(elementHeading2.style, {
+    Object.assign(elementHeading2.style, {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -367,11 +368,11 @@ async function uiParcelPicking() {
                 console.log(parcelHeft);
                 const parcelInfo = gameData["parcels"][p]["info"];
                 console.log(parcelInfo);
-                
+
                 const elementListItem = document.createElement("li");
                 elementListItem.setAttribute("id", p);
                 const elementHeading3 = document.createElement("h4");
-                elementHeading3.textContent = `${parcelItem}: ${parcelHeft}`;            
+                elementHeading3.textContent = `${parcelItem}: ${parcelHeft}`;
                 const elementParagraph = document.createElement("p");
                 elementParagraph.textContent = parcelInfo;
 
@@ -422,7 +423,7 @@ async function backendPing() {
 function turnStart(playerName) {    // Wait for player's confirmation to start their turn.
     return new Promise(resolve => {
         confirm("Oletko valmis aloittamaan vuorosi, " + playerName)
-        ? resolve(true) : resolve(false);
+            ? resolve(true) : resolve(false);
     });
 }
 function turnEnd(playerName) {    // Wait for conditions to be met to stop active player's turn.

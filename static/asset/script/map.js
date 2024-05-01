@@ -18,6 +18,7 @@ export function show() {
 
     playerMarker = L.marker(startLocation).addTo(map);
     playerMarker._icon.classList.add('player-marker'); // Add class that changes marker color from blue to red
+    document.querySelector('#map').style.zIndex = '1';
 }
 
 /**
