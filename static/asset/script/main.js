@@ -265,12 +265,16 @@ function uiPlayerSelection() {
     });
     
     document.querySelector(".ButtonSelectionStart").addEventListener("click", async () => {
-        gameData = await Menu.gameStartNew(players);
-        console.log(gameData);
+        try {
+            gameData = await Menu.gameStartNew(players);
+            uiParcelPicking();
+        } catch (error) {
+            console.log(error);
+        }
     });
     
     document.querySelector('.ButtonSelectionBack').addEventListener('click', () => {
-        players.splice(0);
+        players.splice(0); // clear <players> before navigating back.
         uiMainMenu();
     });
 
@@ -333,41 +337,67 @@ function uiPlayerSelection() {
     });
 }
 
-// UI: Ready-to-play?
-
-
 // UI: Parcel picking
-function uiParcelPicking() {
-    uiActiveClear();
+async function uiParcelPicking() {
+    for (let i = 0; i < gameData["players"].length; i++) {
+        uiActiveClear();
+        const playerName = gameData["players"][i]["name"];
+        const playerIsReady = await turnStart(playerName);
 
-    // Create DOM elements.
-    const elementSection = document.createElement("section");
-    elementSection.setAttribute("id", "uiActive");
-    
-    const elementHeading = document.createElement("h2");
-    elementHeading.textContent = "Liity peliin";
+        if (playerIsReady) {
+            // Create DOM elements.
+            const elementSection = document.createElement("section");
+            elementSection.setAttribute("id", "uiActive");
+            const elementHeading1 = document.createElement("h2");
+            elementHeading1.textContent = "Valitse pakettisi!";
+            const elementHeading2 = document.createElement("h3");
+            elementHeading2.textContent = playerName;
+            const elementUnorderedList = document.createElement("ul");
 
-    const elementUnorderedList = document.createElement("ul");
-    const elementListItem1 = document.createElement("li");
-    const elementButton1 = document.createElement("button");
-    elementButton1.textContent = "aloita vuorosi";
-    elementButton1.setAttribute("class", "BLA");
-
-    uiInterface.appendChild(elementSection);
-    elementSection.appendChild(elementHeading);
-    elementSection.appendChild(elementUnorderedList);
-    
-    elementListItem1.appendChild(elementButton1);
-    elementUnorderedList.appendChild(elementListItem1);
-
-    // Add DOM Eeventlisteners.
+            uiInterface.appendChild(elementSection);
+            elementSection.appendChild(elementHeading1);
+            elementSection.appendChild(elementHeading2);
+            elementSection.appendChild(elementUnorderedList);
 
 
-    // Style DOM elements.
-    
+            for (let p = 0; p < gameData["parcels"].length; p++) {
+                const parcelItem = gameData["parcels"][p]["item"];
+                console.log(parcelItem);
+                const parcelHeft = gameData["parcels"][p]["heft"];
+                console.log(parcelHeft);
+                const parcelInfo = gameData["parcels"][p]["info"];
+                console.log(parcelInfo);
+                
+                const elementListItem = document.createElement("li");
+                elementListItem.setAttribute("id", p);
+                const elementHeading3 = document.createElement("h4");
+                elementHeading3.textContent = `${parcelItem}: ${parcelHeft}`;            
+                const elementParagraph = document.createElement("p");
+                elementParagraph.textContent = parcelInfo;
+
+                elementUnorderedList.appendChild(elementListItem);
+                elementListItem.appendChild(elementHeading3);
+                elementListItem.appendChild(elementParagraph);
+
+
+                // Add DOM EventListeners
+                elementListItem.addEventListener("click", () => {    // Each parcel is chosen via this listener!
+                    console.log("Klikkasit pakettia indeksillä:" + p);
+                });
+
+            }
+            await turnEnd(playerName);
+
+            // Style DOM elements
+            Object.assign(elementSection.style, {
+                color: 'white',
+            });
+        }
+    }
 }
 
 // UI: Parcel Delivery
+
 
 // UI: Results Screen
 
@@ -387,4 +417,15 @@ async function backendPing() {
     } catch (error) {
         console.error("error: ping backend", error);
     }
+}
+
+function turnStart(playerName) {    // Wait for player's confirmation to start their turn.
+    return new Promise(resolve => {
+        confirm("Oletko valmis aloittamaan vuorosi, " + playerName)
+        ? resolve(true) : resolve(false);
+    });
+}
+function turnEnd(playerName) {    // Wait for conditions to be met to stop active player's turn.
+    return new Promise(resolve => {
+    });
 }

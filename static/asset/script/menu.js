@@ -59,15 +59,19 @@ export async function gameStartNew(playerList) {
     let responseJSON;
     
     try {
-        //console.log(playerList);
-        const data = encodeURIComponent(JSON.stringify(playerList));
-        //console.log(data);
-        const response = await fetch("http://127.0.0.1:3333/game/new?players=" + data);
+        console.log("players (array):", playerList);
+        const playersString = playerList.join(',');
+        console.log("players (string):", playersString);
+        const data = encodeURIComponent(playersString);
+        console.log("data (tx):", data);
+        
+        const response = await fetch(`http://127.0.0.1:3333/game/new?players=${data}`);
+        console.log("data (rx):", response);
         responseJSON = await response.json();
     } catch (error) {
         console.log(error);
     }
-    //console.log(responseJSON);
+    console.log("data (rx):", responseJSON);
     return responseJSON;
 }
 
