@@ -4,7 +4,7 @@ let map;
 let playerMarker;
 let packageMarkers = [];
 let travelLine;
-const startLocation = [60.3187626, 24.9655689]; // Helsinki-Vantaa airport
+const startLocation = [60.3172, 24.963301]; // Helsinki-Vantaa airport
 
 /**
  * Creates and shows new map with player marker
