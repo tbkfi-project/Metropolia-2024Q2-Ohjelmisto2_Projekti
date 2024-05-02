@@ -7,7 +7,7 @@ import * as Map from './map.js'
  */
 function getPackageLocations(parcels) {
     let parcelLocations = [];
-    parcels.array.forEach(parcel => {
+    parcels.forEach(parcel => {
         parcelLocations.push(parcel.location);
     });
     return parcelLocations;
