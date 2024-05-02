@@ -1,6 +1,16 @@
 import * as Map from './map.js'
 
 /**
+ * Remove currently active screen
+ */
+function clearActiveScreen() {
+    const activeScreen = document.querySelector('#uiActive');
+    if (activeScreen) {
+        activeScreen.remove();
+    }
+}
+
+/**
  * Get every parcel location from parcels array
  * @param {Array<Object>} parcels Array of parcel objects 
  * @returns {Array<Array<Number, Number>>} Array of parcel coords
@@ -18,6 +28,7 @@ function getPackageLocations(parcels) {
  * @param {Object} player Player data object
  */
 export function start(player) {
+    clearActiveScreen();
     Map.clearMap();
     Map.createPlayerMarker(player.location);
 
