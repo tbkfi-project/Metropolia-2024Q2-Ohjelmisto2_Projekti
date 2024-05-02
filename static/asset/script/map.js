@@ -16,9 +16,28 @@ export function show() {
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
 
-    playerMarker = L.marker(startLocation).addTo(map);
-    playerMarker._icon.classList.add('player-marker'); // Add class that changes marker color from blue to red
     document.querySelector('#map').style.zIndex = '1';
+}
+
+/**
+ * Clear the map from all the markers and polylines
+ */
+export function clearMap() {
+    map.setView(startLocation, 5);
+    map.eachLayer((layer) => {
+        if (layer instanceof L.Marker || layer instanceof L.Polyline) {
+            layer.remove();
+        }
+    });
+}
+
+/**
+ * Create player marker to the given coords
+ * @param {Array<Number, Number>} playerLocation Array with coordinates [Latitude, Longitude]
+ */
+export function createPlayerMarker(playerLocation) {
+    playerMarker = L.marker(playerLocation).addTo(map);
+    playerMarker._icon.classList.add('player-marker'); // Add class that changes marker color from blue to red
 }
 
 /**
