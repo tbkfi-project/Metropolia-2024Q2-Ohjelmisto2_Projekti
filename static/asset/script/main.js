@@ -346,7 +346,7 @@ function uiPlayerSelection() {
 async function uiParcelPicking() {
     for (let i = 0; i < gameData["players"].length; i++) {
         uiActiveClear();
-        const currentPlayer = gameData["players"][i]["name"];
+        currentPlayer = gameData["players"][i]["name"];
         const playerIsReady = await turnStart(currentPlayer);
         parcelSelected = "";
 
@@ -424,9 +424,9 @@ async function backendPing() {
     }
 }
 
-function turnStart(playerName) {    // Wait for player's confirmation to start their turn.
+function turnStart() {    // Wait for player's confirmation to start their turn.
     return new Promise(resolve => {
-        confirm("Oletko valmis aloittamaan vuorosi, " + currentPlayer)
+        confirm("Oletko valmis aloittamaan vuorosi, " + currentPlayer + "?")
             ? resolve(true) : resolve(false);
     });
 }
