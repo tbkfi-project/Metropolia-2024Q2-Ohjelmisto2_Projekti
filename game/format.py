@@ -9,6 +9,10 @@ class Parcel:
         self.destination_country = destination_country
         self.location = location
         self.delivered = False
+        self.distance_to_player = 0
+        self.travel_time = {"cargo_plane": 0,
+                            "passenger_plane": 0,
+                            "private_jet": 0}
 
 
 # Player object
