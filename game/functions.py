@@ -77,6 +77,15 @@ def calculate_flight_time(distance_from_player, airplane):
     return travel_time
 
 
+def calculate_flight_times(player):
+    for parcel in player.parcels_picked:
+        default_flight_time = parcel.distance_to_player / format.transport_speed1
+
+        parcel.travel_time["cargo_plane"] = default_flight_time * format.transport_speed3
+        parcel.travel_time["passenger_plane"] = default_flight_time
+        parcel.travel_time["private_jet"] = default_flight_time * format.transport_speed2
+
+
 def calculate_flight_CO2(distance_from_player, airplane, player_parcels, chosen_parcel_co2):
     match airplane:
         case "1":

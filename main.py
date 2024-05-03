@@ -53,6 +53,7 @@ def endpoint_game(function_name):
                     acting_player = player
 
             game.functions.calculate_distances(acting_player)
+            game.functions.calculate_flight_times(acting_player)
 
             json_body = {"parcels": [vars(parcel) for parcel in acting_player.parcels_picked]}
             return Response(response=json.dumps(json_body), status=200, mimetype="application/json") # returns: "parcels" = all variables of all parcels that the inputted player has chosen
@@ -70,6 +71,7 @@ def endpoint_game(function_name):
             game.functions.deliver_parcel(acting_player, chosen_parcel_index, chosen_airplane)
 
             game.functions.calculate_distances(acting_player)
+            game.functions.calculate_flight_times(acting_player)
 
             time_over = game.functions.is_time_over(turn_end_time, player_used_time)
             if time_over:
