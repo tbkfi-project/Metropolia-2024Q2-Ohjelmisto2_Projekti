@@ -25,7 +25,7 @@ jsCheck.remove();
 startApplicationPanel();
 startApplicationScreen();
 Map.show();
-setInterval(backendPing, 200000);
+setInterval(backendPing, 5000);
 
 
 // applicationPanel: Initial State
@@ -95,7 +95,7 @@ function uiPanel() {
     const elementListItem4Paragraph = document.createElement("p");
     elementListItem4Paragraph.textContent = "backend status";
     const elementListItem4Div = document.createElement("div");
-    elementListItem4Div.setAttribute("id", "elementBackendStatusOrb");
+    elementListItem4Div.setAttribute("id", "backendStatusOrb");
 
     elementListItem4.appendChild(elementListItem4Paragraph);
     elementListItem4.appendChild(elementListItem4Div);
@@ -105,7 +105,7 @@ function uiPanel() {
 
 
     // Style DOM elements.
-    Object.assign(elementBackendStatusOrb.style, {
+    Object.assign(backendStatusOrb.style, {
         width: '1rem',
         height: '1rem',
         backgroundColor: 'green',
@@ -555,18 +555,17 @@ async function uiHiscores() {
 
 // Other
 async function backendPing() {
-    const elementOrb = document.querySelector("#elementBackendStatusOrb");
+    const elementOrb = document.querySelector("#backendStatusOrb");
     try {
         const response = await fetch("http://127.0.0.1:3333/game/check_connection");
-        //console.log(response);
+        // console.log("ping: backend response", response);
 
         if (response.ok) {
-            elementOrb.style.backgroundColor = "green";
-        } else {
-            elementOrb.style.backgroundColor = "red";
+            backendStatusOrb.style.backgroundColor = "green";
         }
     } catch (error) {
-        console.error("error: ping backend", error);
+        // console.error("error: backend response", error);
+        backendStatusOrb.style.backgroundColor = "red";
     }
 }
 
