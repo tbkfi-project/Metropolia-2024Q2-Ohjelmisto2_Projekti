@@ -101,6 +101,22 @@ main {
   height: 70vh !important;
 }
 
+.parcel-delivery-screen-container {
+  background-color: var(--colour-white);
+}
+
+.parcel-delivery-screen {
+  padding: 1em;
+}
+
+.parcel-delivery-list li {
+  padding: .5em;
+  margin: .5em;
+  color: var(--colour-white);
+  border-radius: 10px;
+  background-color: var(--colour-secondary);
+}
+
 /* Default settings for elements */
 button {
   width: 8rem;
