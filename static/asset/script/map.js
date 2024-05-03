@@ -4,7 +4,7 @@ let map;
 let playerMarker;
 let packageMarkers = [];
 let travelLine;
-const startLocation = [60.3187626, 24.9655689]; // Helsinki-Vantaa airport
+const startLocation = [60.3172, 24.963301]; // Helsinki-Vantaa airport
 
 /**
  * Creates and shows new map with player marker
@@ -16,9 +16,50 @@ export function show() {
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
 
-    playerMarker = L.marker(startLocation).addTo(map);
-    playerMarker._icon.classList.add('player-marker'); // Add class that changes marker color from blue to red
     document.querySelector('#map').style.zIndex = '1';
+}
+
+/**
+ * Change map size/showing style on the screen between game and default background
+ * @param {String} type Expected values 'game' or 'default'
+ */
+export function changeScreenType(type) {
+    const mapElement = document.querySelector('#map');
+    switch (type) {
+        case 'game':
+            mapElement.classList.add('game-map');
+            break;
+
+        case 'default':
+            mapElement.classList.remove('game-map');
+            break;
+
+        default:
+            console.warn('Wrong screen type given to Map.changeScreenType() function.');
+    }
+
+    map.setView(startLocation, 5);
+}
+
+/**
+ * Clear the map from all the markers and polylines
+ */
+export function clearMap() {
+    map.setView(startLocation, 5);
+    map.eachLayer((layer) => {
+        if (layer instanceof L.Marker || layer instanceof L.Polyline) {
+            layer.remove();
+        }
+    });
+}
+
+/**
+ * Create player marker to the given coords
+ * @param {Array<Number, Number>} playerLocation Array with coordinates [Latitude, Longitude]
+ */
+export function createPlayerMarker(playerLocation) {
+    playerMarker = L.marker(playerLocation).addTo(map);
+    playerMarker._icon.classList.add('player-marker'); // Add class that changes marker color from blue to red
 }
 
 /**

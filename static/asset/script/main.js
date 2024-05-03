@@ -14,6 +14,10 @@ const uiInterface = document.querySelector("#uiInterface");
 const versionNumber = "dev"
 let gameData;
 
+let currentPlayer = "";
+let parcelSelected = "";
+let parcelDelivered = "";
+
 
 // Initialise Application
 jsCheck.remove();
@@ -342,8 +346,9 @@ function uiPlayerSelection() {
 async function uiParcelPicking() {
     for (let i = 0; i < gameData["players"].length; i++) {
         uiActiveClear();
-        const playerName = gameData["players"][i]["name"];
-        const playerIsReady = await turnStart(playerName);
+        currentPlayer = gameData["players"][i]["name"];
+        const playerIsReady = await turnStart(currentPlayer);
+        parcelSelected = "";
 
         if (playerIsReady) {
             // Create DOM elements.
@@ -352,22 +357,22 @@ async function uiParcelPicking() {
             const elementHeading1 = document.createElement("h2");
             elementHeading1.textContent = "Valitse pakettisi!";
             const elementHeading2 = document.createElement("h3");
-            elementHeading2.textContent = playerName;
-            const elementUnorderedList = document.createElement("ul");
+            elementHeading2.textContent = currentPlayer;
+            const elementOrderedList = document.createElement("ul");
 
             uiInterface.appendChild(elementSection);
             elementSection.appendChild(elementHeading1);
             elementSection.appendChild(elementHeading2);
-            elementSection.appendChild(elementUnorderedList);
+            elementSection.appendChild(elementOrderedList);
 
 
             for (let p = 0; p < gameData["parcels"].length; p++) {
                 const parcelItem = gameData["parcels"][p]["item"];
-                console.log(parcelItem);
                 const parcelHeft = gameData["parcels"][p]["heft"];
-                console.log(parcelHeft);
                 const parcelInfo = gameData["parcels"][p]["info"];
-                console.log(parcelInfo);
+                //console.log(parcelInfo);
+                //console.log(parcelHeft);
+                //console.log(parcelItem);
 
                 const elementListItem = document.createElement("li");
                 elementListItem.setAttribute("id", p);
@@ -376,23 +381,23 @@ async function uiParcelPicking() {
                 const elementParagraph = document.createElement("p");
                 elementParagraph.textContent = parcelInfo;
 
-                elementUnorderedList.appendChild(elementListItem);
+                elementOrderedList.appendChild(elementListItem);
                 elementListItem.appendChild(elementHeading3);
                 elementListItem.appendChild(elementParagraph);
 
 
                 // Add DOM EventListeners
-                elementListItem.addEventListener("click", () => {    // Each parcel is chosen via this listener!
-                    console.log("Klikkasit pakettia indeksillä:" + p);
-                });
-
+                elementListItem.addEventListener("click", parcelSelectListener);    // Each parcel is chosen via this listener!
             }
-            await turnEnd(playerName);
 
             // Style DOM elements
             Object.assign(elementSection.style, {
+                zIndex: '1',
+                position: 'absolute',
                 color: 'white',
             });
+
+            await turnEnd("parcelSelect", currentPlayer);
         }
     }
 }
@@ -408,9 +413,8 @@ async function backendPing() {
     try {
         const response = await fetch("http://127.0.0.1:3333/game/check_connection");
         //console.log(response);
-        const backendStatus = response.ok;
 
-        if (backendStatus) {
+        if (response.ok) {
             elementOrb.style.backgroundColor = "green";
         } else {
             elementOrb.style.backgroundColor = "red";
@@ -420,13 +424,36 @@ async function backendPing() {
     }
 }
 
-function turnStart(playerName) {    // Wait for player's confirmation to start their turn.
+function turnStart() {    // Wait for player's confirmation to start their turn.
     return new Promise(resolve => {
-        confirm("Oletko valmis aloittamaan vuorosi, " + playerName)
+        confirm("Oletko valmis aloittamaan vuorosi, " + currentPlayer + "?")
             ? resolve(true) : resolve(false);
     });
 }
-function turnEnd(playerName) {    // Wait for conditions to be met to stop active player's turn.
+function turnEnd(gamePhase, playerName) {    // Wait for conditions to be met to stop active player's turn.
     return new Promise(resolve => {
     });
 }
+
+async function parcelSelectListener(event) {
+    console.log(`${currentPlayer} chose parcel index ${this.id}.`);
+    this.removeEventListener("click", parcelSelectListener);
+    parcelSelected += this.id;
+    console.log("selected parcels", parcelSelected);
+
+    // Style DOM elements (after entry has been selected)
+    Object.assign(this.style, {
+        color: 'red',
+    });
+
+    if (parcelSelected.length === 5) {
+        try {
+            const response = await fetch(`http://127.0.0.1:3333/game/parcel_select?player=${currentPlayer}&indexes=${parcelSelected}`);
+            console.log(response);
+        } catch (error) {
+            console.error("error: parcel selection", error);
+        }
+    }
+}
+
+

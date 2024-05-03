@@ -96,6 +96,11 @@ main {
   position: absolute;
 }
 
+.game-map {
+  position: relative !important;
+  height: 70vh !important;
+}
+
 /* Default settings for elements */
 button {
   width: 8rem;
