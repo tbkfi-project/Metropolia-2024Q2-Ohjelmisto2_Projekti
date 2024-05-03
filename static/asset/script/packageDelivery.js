@@ -34,4 +34,6 @@ export function start(player) {
 
     const packageCoords = getPackageLocations(player.parcels_picked);
     Map.addPackageDeliveryMarkers(packageCoords);
+
+    Map.changeScreenType('game');
 } 

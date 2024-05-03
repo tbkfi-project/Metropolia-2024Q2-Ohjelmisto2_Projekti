@@ -20,6 +20,28 @@ export function show() {
 }
 
 /**
+ * Change map size/showing style on the screen between game and default background
+ * @param {String} type Expected values 'game' or 'default'
+ */
+export function changeScreenType(type) {
+    const mapElement = document.querySelector('#map');
+    switch (type) {
+        case 'game':
+            mapElement.classList.add('game-map');
+            break;
+
+        case 'default':
+            mapElement.classList.remove('game-map');
+            break;
+
+        default:
+            console.warn('Wrong screen type given to Map.changeScreenType() function.');
+    }
+
+    map.setView(startLocation, 5);
+}
+
+/**
  * Clear the map from all the markers and polylines
  */
 export function clearMap() {
