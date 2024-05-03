@@ -504,7 +504,9 @@ async function uiHiscores() {
     const elementTableHeader2 = document.createElement("th");
     elementTableHeader2.textContent = "nimimerkki";
     const elementTableHeader3 = document.createElement("th");
-    elementTableHeader3.textContent = "sessio";
+    elementTableHeader3.textContent = "pisteet";
+    const elementTableHeader4 = document.createElement("th");
+    elementTableHeader4.textContent = "sessio";
     const elementButton = document.createElement("button");
     elementButton.textContent = "palaa valikkoon";
 
@@ -515,6 +517,7 @@ async function uiHiscores() {
     elementTableRow.appendChild(elementTableHeader1);
     elementTableRow.appendChild(elementTableHeader2);
     elementTableRow.appendChild(elementTableHeader3);
+    elementTableRow.appendChild(elementTableHeader4);
     elementSection.appendChild(elementButton);
 
 
@@ -526,11 +529,14 @@ async function uiHiscores() {
         elementTableData2.textContent = responseJSON["highscores"][s]["name"];
         const elementTableData3 = document.createElement("td");
         elementTableData3.textContent = responseJSON["highscores"][s]["score"];
+        const elementTableData4 = document.createElement("td");
+        elementTableData4.textContent = responseJSON["highscores"][s]["gameID"];
 
         elementTable.appendChild(elementTableRowPlayer);
         elementTableRowPlayer.appendChild(elementTableData1);
         elementTableRowPlayer.appendChild(elementTableData2);
         elementTableRowPlayer.appendChild(elementTableData3);
+        elementTableRowPlayer.appendChild(elementTableData4);
     }
 
     // Add DOM Event Listeners
