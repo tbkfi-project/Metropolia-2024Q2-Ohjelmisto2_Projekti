@@ -33,9 +33,17 @@ def endpoint_game(function_name):
             for player in player_list:
                 if player.name == acting_player_name:
                     acting_player = player
+
+            player_used_time = acting_player.time_traveled
+            time_over = game.functions.is_time_over(turn_end_time, player_used_time)
+            if time_over:
+                acting_player.gameover = True
+                json_body = {"game_over": True}
+                return Response(response=json.dumps(json_body), status=200, mimetype="application/json")
+
             selected_indexes = [*selected_indexes_raw]
             game.functions.select_parcels_for_player(acting_player, selected_indexes, parcel_list)
-            json_body = {"success": True}
+            json_body = {"game_over": False}
             return Response(response=json.dumps(json_body), status=200, mimetype="application/json")
 
         case "player_parcel_list":
@@ -43,6 +51,9 @@ def endpoint_game(function_name):
             for player in player_list:
                 if player.name == acting_player_name:
                     acting_player = player
+
+            game.functions.calculate_distances(acting_player)
+
             json_body = {"parcels": [vars(parcel) for parcel in acting_player.parcels_picked]}
             return Response(response=json.dumps(json_body), status=200, mimetype="application/json")
 
@@ -51,21 +62,31 @@ def endpoint_game(function_name):
             for player in player_list:
                 if player.name == acting_player_name:
                     acting_player = player
+
+            player_used_time = acting_player.time_traveled
+
             game.functions.deliver_parcel(acting_player, chosen_parcel_index, chosen_airplane)
+
+            game.functions.calculate_distances(acting_player)
+
+            time_over = game.functions.is_time_over(turn_end_time, player_used_time)
+            if time_over:
+                acting_player.gameover = True
+                json_body = {"game_over": True}
+                return Response(response=json.dumps(json_body), status=200, mimetype="application/json")
+
             json_body = {"parcels": [vars(parcel) for parcel in acting_player.parcels_picked]}
             return Response(response=json.dumps(json_body), status=200, mimetype="application/json")
-
-        case "parcel_result":
-            print("uli")
 
         case "highscores":
             highscores_list = game.functions.get_highscores()
             json_body = {"highscores": [vars(player) for player in highscores_list]}
             return Response(response=json.dumps(json_body), status=200, mimetype="application/json")
 
-        case "add_highscores":
+        case "end_game":
+            game.functions.calculate_scores(player_list)
             game.functions.add_highscores(player_list)
-            json_body = {"success": True}
+            json_body = {"players": [vars(player) for player in player_list]}
             return Response(response=json.dumps(json_body), status=200, mimetype="application/json")
 
         case "time":
@@ -84,6 +105,17 @@ def endpoint_game(function_name):
             json_body = {"is_time_over": time_over}
             return Response(response=json.dumps(json_body), status=200, mimetype="application/json")
 
+        case "time_left":
+            acting_player_name = args["player"]
+            for player in player_list:
+                if player.name == acting_player_name:
+                    acting_player = player
+
+            player_used_time = acting_player.time_traveled
+            time_left = game.functions.time_left(turn_end_time, player_used_time)
+            json_body = {"player": acting_player.name, "time_left": time_left, "added_time": acting_player.time_traveled}
+            return Response(response=json.dumps(json_body), status=200, mimetype="application/json")
+
         case "start_new_time":
             time_limit = int(args["seconds"])
             turn_end_time = game.functions.set_end_time(time_limit)
@@ -94,6 +126,17 @@ def endpoint_game(function_name):
         case "check_connection":
             connected = game.functions.check_connection()
             json_body = {"connected": connected}
+            return Response(response=json.dumps(json_body), status=200, mimetype="application/json")
+
+        case "game_over":
+            acting_player_name = args["player"]
+            for player in player_list:
+                if player.name == acting_player_name:
+                    acting_player = player
+
+            acting_player.gameover = True
+
+            json_body = {"player": acting_player.name, "game_over": acting_player.gameover}
             return Response(response=json.dumps(json_body), status=200, mimetype="application/json")
 
         case _:

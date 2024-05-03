@@ -37,6 +37,13 @@ def select_parcels_for_player(player, selected_parcel_indexes, parcel_list):
         player.parcels_picked.append(copy.deepcopy(parcel_list[int(parcel_index)]))
 
 
+def calculate_distances(player):
+    parcel_list = player.parcels_picked
+
+    for parcel in parcel_list:
+        distance_from_player = float(str(calculate_distance(player.location, parcel.location))[:-3])
+        parcel.distance_to_player = distance_from_player
+
 def deliver_parcel(player, parcel_index, airplane):
     distance_from_player = float(str(calculate_distance(player.location, player.parcels_picked[int(parcel_index)].location))[:-3])
     player.distance_traveled += distance_from_player
@@ -95,6 +102,17 @@ def get_highscores():
     return highscores_list
 
 
+def calculate_scores(player_list):
+    for player in player_list:
+        player.parcels_picked = []
+        if player.co2_produced != 0:
+            score = int(((1 / player.co2_produced) * 1000000) * 1000)
+        else:
+            score = 0
+        if not player.gameover:
+            player.score = score
+
+
 def add_highscores(player_list):
     database.insert_new_player_scores_in_to_db(player_list)
 
@@ -109,9 +127,15 @@ def is_time_over(end_time, added_time):
     return True
 
 
+def time_left(end_time, added_time):
+    how_much_time_left = end_time - get_time() + added_time
+    return how_much_time_left
+
+
 def set_end_time(time_limit):
     endtime = get_time() + time_limit
     return endtime
+
 
 def check_connection():
     connected = database.connection_check()
