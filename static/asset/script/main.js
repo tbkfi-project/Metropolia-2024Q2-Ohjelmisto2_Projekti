@@ -14,9 +14,10 @@ const uiInterface = document.querySelector("#uiInterface");
 const versionNumber = "dev"
 let gameData;
 
-let currentPlayer = "";
-let parcelSelected = "";
-let parcelDelivered = "";
+let currentPlayer = "";    // index number
+let currentTurnStart = 0;  // unix timestamp
+let parcelSelected = "";   // lazy global var
+let parcelDelivered = "";  // lazy global var
 
 
 // Initialise Application
@@ -346,18 +347,20 @@ function uiPlayerSelection() {
 async function uiParcelPicking() {
     for (let i = 0; i < gameData["players"].length; i++) {
         uiActiveClear();
-        currentPlayer = gameData["players"][i]["name"];
-        const playerIsReady = await turnStart(currentPlayer);
+        currentPlayer = i;
+        const playerIsReady = await turnStart(gameData["players"][i]["name"]);
         parcelSelected = "";
 
         if (playerIsReady) {
+            currentTurnStart = Date.now();
+
             // Create DOM elements.
             const elementSection = document.createElement("section");
             elementSection.setAttribute("id", "uiActive");
             const elementHeading1 = document.createElement("h2");
             elementHeading1.textContent = "Valitse pakettisi!";
             const elementHeading2 = document.createElement("h3");
-            elementHeading2.textContent = currentPlayer;
+            elementHeading2.textContent = gameData["players"][i]["name"];
             const elementOrderedList = document.createElement("ul");
 
             uiInterface.appendChild(elementSection);
@@ -397,7 +400,21 @@ async function uiParcelPicking() {
                 color: 'white',
             });
 
-            await turnEnd("parcelSelect", currentPlayer);
+            // Turn end conditions
+            await new Promise( (resolve) => {
+                const turnLimit = 30000;         
+                const turnEndTimer = setInterval( () => { // setInterval repeats until 1: parcels selected, 2: time is up. -> ends the player's turn.
+                    console.log("turn (30000ms): elapsed:", Date.now() - currentTurnStart)
+                    
+                    if (Date.now() - currentTurnStart > turnLimit || parcelSelected.length === 5) {
+                        clearInterval(turnEndTimer);
+                        resolve();
+                    }
+                }, 1000);
+            });
+
+            
+            alert("Vuorosi on päättynyt!");
         }
     }
 }
@@ -426,34 +443,32 @@ async function backendPing() {
 
 function turnStart() {    // Wait for player's confirmation to start their turn.
     return new Promise(resolve => {
-        confirm("Oletko valmis aloittamaan vuorosi, " + currentPlayer + "?")
+        confirm("Oletko valmis aloittamaan vuorosi, " + gameData["players"][currentPlayer]["name"] + "?")
             ? resolve(true) : resolve(false);
-    });
-}
-function turnEnd(gamePhase, playerName) {    // Wait for conditions to be met to stop active player's turn.
-    return new Promise(resolve => {
     });
 }
 
 async function parcelSelectListener(event) {
-    console.log(`${currentPlayer} chose parcel index ${this.id}.`);
+    console.log(`${gameData["players"][currentPlayer]["name"]} chose parcel index ${this.id}.`);
     this.removeEventListener("click", parcelSelectListener);
-    parcelSelected += this.id;
-    console.log("selected parcels", parcelSelected);
 
-    // Style DOM elements (after entry has been selected)
-    Object.assign(this.style, {
+    if (parcelSelected.length < 5) { // dont add more than what is wanted
+        parcelSelected += this.id;
+
+        // Style DOM elements (after entry has been selected)
+        Object.assign(this.style, {
         color: 'red',
     });
 
-    if (parcelSelected.length === 5) {
-        try {
-            const response = await fetch(`http://127.0.0.1:3333/game/parcel_select?player=${currentPlayer}&indexes=${parcelSelected}`);
-            console.log(response);
-        } catch (error) {
-            console.error("error: parcel selection", error);
+        if (parcelSelected.length === 5) { // If all 5 parcels selected, notify backend.
+            try {
+                const response = await fetch(`http://127.0.0.1:3333/game/parcel_select?player=${gameData["players"][currentPlayer]["name"]}&indexes=${parcelSelected}`);
+                console.log(response);
+            } catch (error) {
+                console.error("error: parcel selection", error);
+            }
         }
-    }
+    };
 }
 
 
