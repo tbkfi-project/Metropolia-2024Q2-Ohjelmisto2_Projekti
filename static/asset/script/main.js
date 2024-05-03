@@ -443,18 +443,32 @@ async function uiResultScreen() {
     elementSection.setAttribute("id", "uiActive");
     const elementHeading = document.createElement("h2");
     elementHeading.textContent = "Pisteet";
-    const elementOrderedList = document.createElement("ol");
+    const elementTable = document.createElement("table");
+    const elementTableRow = document.createElement("tr");
+    const elementTableHeader1 = document.createElement("th");
+    elementTableHeader1.textContent = "nimimerkki";
+    const elementTableHeader2 = document.createElement("th");
+    elementTableHeader2.textContent = "pisteet";
     const elementButton = document.createElement("button");
     elementButton.textContent = "palaa alkuun";
 
     uiInterface.appendChild(elementSection);
     elementSection.appendChild(elementHeading);
-    elementSection.appendChild(elementOrderedList);
+    elementSection.appendChild(elementTable);
     elementSection.appendChild(elementButton);
 
 
-    for (let s = 0; s < responseJSON["player"].length; s++) {
-        // Lisää <li> -> elementOrderedList jokaisen pelaajan pisteille
+    for (let s = 0; s < responseJSON["players"].length; s++) {
+        const elementTableRowPlayer = document.createElement("tr");
+        const elementTableData1 = document.createElement("td");
+        elementTableData1.textContent = responseJSON["players"][s]["name"];
+        const elementTableData2 = document.createElement("td");
+        elementTableData2.textContent = responseJSON["players"][s]["score"];
+
+        elementTable.appendChild(elementTableRowPlayer);
+        elementTableRowPlayer.appendChild(elementTableData1);
+        elementTableRowPlayer.appendChild(elementTableData2);
+        elementTableRowPlayer.appendChild(elementTableData3);
     }
 
     // Add DOM Event Listeners
@@ -483,21 +497,40 @@ async function uiHiscores() {
     elementSection.setAttribute("id", "uiActive");
     const elementHeading = document.createElement("h2");
     elementHeading.textContent = "Hiscores";
-    const elementOrderedList = document.createElement("ol");
+    const elementTable = document.createElement("table");
+    const elementTableRow = document.createElement("tr");
+    const elementTableHeader1 = document.createElement("th");
+    elementTableHeader1.textContent = "sija";
+    const elementTableHeader2 = document.createElement("th");
+    elementTableHeader2.textContent = "nimimerkki";
+    const elementTableHeader3 = document.createElement("th");
+    elementTableHeader3.textContent = "sessio";
     const elementButton = document.createElement("button");
     elementButton.textContent = "palaa valikkoon";
 
     uiInterface.appendChild(elementSection);
     elementSection.appendChild(elementHeading);
-    elementSection.appendChild(elementOrderedList);
+    elementSection.appendChild(elementTable);
+    elementTable.appendChild(elementTableRow);
+    elementTableRow.appendChild(elementTableHeader1);
+    elementTableRow.appendChild(elementTableHeader2);
+    elementTableRow.appendChild(elementTableHeader3);
     elementSection.appendChild(elementButton);
 
 
     for (let s = 0; s < responseJSON["highscores"].length; s++) {
-        const elementListItem = document.createElement("li");
-        elementListItem.textContent = `${responseJSON["highscores"][s]["name"]} - ${responseJSON["highscores"][s]["score"]}`;
+        const elementTableRowPlayer = document.createElement("tr");
+        const elementTableData1 = document.createElement("td");
+        elementTableData1.textContent = s + 1;
+        const elementTableData2 = document.createElement("td");
+        elementTableData2.textContent = responseJSON["highscores"][s]["name"];
+        const elementTableData3 = document.createElement("td");
+        elementTableData3.textContent = responseJSON["highscores"][s]["score"];
 
-        elementOrderedList.appendChild(elementListItem);
+        elementTable.appendChild(elementTableRowPlayer);
+        elementTableRowPlayer.appendChild(elementTableData1);
+        elementTableRowPlayer.appendChild(elementTableData2);
+        elementTableRowPlayer.appendChild(elementTableData3);
     }
 
     // Add DOM Event Listeners
