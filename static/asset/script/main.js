@@ -352,8 +352,12 @@ async function uiParcelPicking() {
         parcelSelected = "";
 
         if (playerIsReady) {
-            currentTurnStart = Date.now();
-
+            const response = await fetch("http://127.0.0.1:3333/game/start_new_time?seconds=30");
+            const responseJSON = await response.json();
+            const currentTurnStart = responseJSON["start_time"];
+            const currentTurnEnd = responseJSON["end_time"];
+            const currentTurnLimit = responseJSON["time_limit"];
+            
             // Create DOM elements.
             const elementSection = document.createElement("section");
             elementSection.setAttribute("id", "uiActive");
@@ -401,15 +405,21 @@ async function uiParcelPicking() {
             });
 
             // Turn end conditions
-            await new Promise( (resolve) => {
-                const turnLimit = 30000;         
+            await new Promise( (resolve) => {       
                 const turnEndTimer = setInterval( () => { // setInterval repeats until 1: parcels selected, 2: time is up. -> ends the player's turn.
-                    console.log("turn (30000ms): elapsed:", Date.now() - currentTurnStart)
+                    console.log("turn elapsed:", Date.now() - currentTurnStart*1000)
                     
-                    if (Date.now() - currentTurnStart > turnLimit || parcelSelected.length === 5) {
+                    if (parcelSelected.length === 5) {
                         clearInterval(turnEndTimer);
                         resolve();
+                    } else if (Date.now() - currentTurnStart*1000 > currentTurnLimit*1000) {
+                        clearInterval(turnEndTimer);
+                        const response = fetch(`http://127.0.0.1:3333/game/game_over?player=${gameData["players"][currentPlayer]["name"]}`);
+                        console.log("gameover", response);
+                        resolve();
                     }
+
+
                 }, 1000);
             });
 
