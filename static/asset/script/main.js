@@ -149,7 +149,7 @@ function uiMainMenu() {
 
     // Add DOM Eeventlisteners.
     elementButton1.addEventListener('click', uiPlayerSelection);
-    elementButton2.addEventListener('click', () => { console.log("TODO") });
+    elementButton2.addEventListener('click', uiHiscores);
 
     // Style DOM elements.
     Object.assign(elementSection.style, {
@@ -433,6 +433,86 @@ async function uiParcelPicking() {
 
 
 // UI: Results Screen
+async function uiResultScreen() {
+    uiActiveClear();
+    response = await fetch("");
+    responseJSON = await response.json();
+        
+    // Create DOM elements.
+    const elementSection = document.createElement("section");
+    elementSection.setAttribute("id", "uiActive");
+    const elementHeading = document.createElement("h2");
+    elementHeading.textContent = "Pisteet";
+    const elementOrderedList = document.createElement("ol");
+    const elementButton = document.createElement("button");
+    elementButton.textContent = "palaa alkuun";
+
+    uiInterface.appendChild(elementSection);
+    elementSection.appendChild(elementHeading);
+    elementSection.appendChild(elementOrderedList);
+    elementSection.appendChild(elementButton);
+
+
+    for (let s = 0; s < responseJSON["player"].length; s++) {
+        // Lisää <li> -> elementOrderedList jokaisen pelaajan pisteille
+    }
+
+    // Add DOM Event Listeners
+    elementButton.addEventListener("click", () => {
+        uiMainMenu();
+    });
+
+    // Style DOM elements
+    Object.assign(elementSection.style, {
+        zIndex: '1',
+        position: 'absolute',
+        color: 'white',
+    });
+
+}
+
+// UI: Hiscores
+async function uiHiscores() {
+    uiActiveClear();
+    const response = await fetch("http://127.0.0.1:3333/game/highscores");
+    const responseJSON = await response.json();
+    console.log(responseJSON["highscores"]);
+        
+    // Create DOM elements.
+    const elementSection = document.createElement("section");
+    elementSection.setAttribute("id", "uiActive");
+    const elementHeading = document.createElement("h2");
+    elementHeading.textContent = "Hiscores";
+    const elementOrderedList = document.createElement("ol");
+    const elementButton = document.createElement("button");
+    elementButton.textContent = "palaa valikkoon";
+
+    uiInterface.appendChild(elementSection);
+    elementSection.appendChild(elementHeading);
+    elementSection.appendChild(elementOrderedList);
+    elementSection.appendChild(elementButton);
+
+
+    for (let s = 0; s < responseJSON["highscores"].length; s++) {
+        const elementListItem = document.createElement("li");
+        elementListItem.textContent = `${responseJSON["highscores"][s]["name"]} - ${responseJSON["highscores"][s]["score"]}`;
+
+        elementOrderedList.appendChild(elementListItem);
+    }
+
+    // Add DOM Event Listeners
+    elementButton.addEventListener("click", () => {
+        uiMainMenu();
+    });
+
+    // Style DOM elements
+    Object.assign(elementSection.style, {
+        zIndex: '1',
+        position: 'absolute',
+        color: 'white',
+    });
+
+}
 
 // Other
 async function backendPing() {
