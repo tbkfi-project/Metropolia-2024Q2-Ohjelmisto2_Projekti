@@ -25,6 +25,8 @@ async function backendPing() {
 
         if (response.ok) {
             backendStatusOrb.style.backgroundColor = "green";
+        } else {
+            backendStatusOrb.style.backgroundColor = "red";
         }
     } catch (error) {
         // console.error("error: backend response", error);
