@@ -6,6 +6,7 @@ let currentlySelectedParcelForDelivery = { // Contains data about currently open
     liElement: null,
     data: null,
 }
+let turnOver = false; // Changes to true when current player turn is over
 
 /**
  * Remove currently active screen
@@ -107,16 +108,23 @@ async function deliverParcel(parcel, flightType) {
 
         if (data) {
             if (data.game_over) {
-                alert('TODO Game over'); // Todo
+                alert('Vuorosi loppui');
+                turnOver = true;
                 return;
             }
 
             document.querySelector('#uiActive').remove(); // Remove current delivery screen so it can be regenerated with new data
 
             const parcels = data.parcels;
-            playerParcels = parcels;
-            createDeliveryScreen(parcels); // Create new parcel delivery screen
-            Map.changePlayerMarkerLocation(parcel.location);
+            if (parcels.length <= 0) {
+                alert('Vuorosi loppui');
+                turnOver = true;
+                return;
+            } else {
+                playerParcels = parcels;
+                createDeliveryScreen(parcels); // Create new parcel delivery screen
+                Map.changePlayerMarkerLocation(parcel.location);
+            }
         }
 
     } catch (error) {
@@ -211,7 +219,8 @@ function createDeliveryScreen(parcels) {
  * @param {Array<Object>} parcels Player parcels
  * @param {Array<Number, Number} playerLocation Array with coordinates [Latitude, Longitude] 
  */
-export function start(nameOfThePlayer, parcels, playerLocation) {
+function start(nameOfThePlayer, parcels, playerLocation) {
+    alert(`${nameOfThePlayer}, aloita pelaus`);
     playerParcels = parcels; // Store player parcels
     playerName = nameOfThePlayer;
     clearActiveScreen(); // Clear active screen
@@ -224,4 +233,75 @@ export function start(nameOfThePlayer, parcels, playerLocation) {
     Map.changeScreenType('game'); // Change map screen type
 
     createDeliveryScreen(playerParcels); // Create and show delivery screen
-} 
+}
+
+/**
+ * Fetch player parcels from endpoint
+ * @param {String} playerName Name of the player 
+ */
+async function getPlayerParcels(playerName) {
+    try {
+        const response = await fetch(`http://127.0.0.1:3333/game/player_parcel_list?player=${playerName}`);
+
+        if (!response.ok) {
+            return {
+                error: Error(`Response was not 200. Returned response code was: ${response.status}`),
+                data: null,
+            };
+        }
+
+        const json = await response.json();
+        return {
+            error: null,
+            data: json,
+        };
+    } catch (error) {
+        return {
+            error: error,
+            data: null,
+        };
+    }
+}
+
+/**
+ * Turn waiter. Used to set startMultiplayer() to sleep until current player turn is over.
+ */
+async function turnWaiter() {
+    return new Promise(resolve => {
+        const interval = setInterval(() => {
+            if (turnOver) {
+                turnOver = false;
+                clearInterval(interval);
+                resolve();
+            }
+        }, 500);
+    });
+}
+
+/**
+ * Start multiplayer game
+ * @param {Array<Object>} players Array of players
+ */
+export async function startMultiplayer(players) {
+    for (let i = 0; i < players.length; i++) {
+        const { error, data } = await getPlayerParcels(players[i].name);
+
+        try {
+            if (error) {
+                console.error('Error occurred in getPlayerParcels()', error);
+                turnOver = true
+                return;
+            }
+
+            if (data) {
+                const parcels = data.parcels;
+                start(players[i].name, parcels, players[i].location);
+            }
+        } catch (error) {
+            console.error('Unexpected error occurred', error);
+            turnOver = true;
+        }
+
+        await turnWaiter(); // Wait until current player turn is over
+    }
+}
