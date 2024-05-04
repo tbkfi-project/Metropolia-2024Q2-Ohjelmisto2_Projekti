@@ -1,7 +1,7 @@
 import * as Map from './map.js'
 
 let playerParcels = [];
-
+let playerName = null;
 let currentlySelectedParcelForDelivery = { // Contains data about currently opened delivery option for parcel
     liElement: null,
     data: null,
@@ -57,8 +57,71 @@ function addParcelElementClickListener(liElement, parcel) {
     liElement.addEventListener('click', elementClicked);
 }
 
+/**
+ * Call parcel delivery endpoint
+ * @param {String} playerName Player name
+ * @param {Number} parcelIndex Parcel Index
+ * @param {Number} flightType Flight type (number) 
+ */
+async function callParcelDeliveryEndpoint(playerName, parcelIndex, flightType) {
+    try {
+        const response = await fetch(`http://127.0.0.1:3333/game/parcel_deliver?player=${playerName}&index=${parcelIndex}&airplane=${flightType}`);
+        if (!response.ok) {
+            return {
+                error: Error(`Response was not 200. Returned response code was: ${response.status}`),
+                data: null,
+            };
+        }
+
+        const json = await response.json();
+        return {
+            error: null,
+            data: json,
+        };
+    } catch (error) {
+        return {
+            error: error,
+            data: null
+        };
+    }
+}
+
+/**
+ * Start parcel delivery
+ * @param {Object} parcel Deliverable parcel object
+ * @param {Number} flightType Flight type (number)  
+ */
 async function deliverParcel(parcel, flightType) {
-    console.log(flightType);
+    if (!playerName) {
+        console.warn('Player name was null');
+        return;
+    }
+
+    try {
+        const { error, data } = await callParcelDeliveryEndpoint(playerName, playerParcels.indexOf(parcel), flightType);
+
+        if (error) {
+            console.error('Error occurred in callParcelDeliveryEndpoint()', error);
+            return;
+        }
+
+        if (data) {
+            if (data.game_over) {
+                alert('TODO Game over'); // Todo
+                return;
+            }
+
+            document.querySelector('#uiActive').remove(); // Remove current delivery screen so it can be regenerated with new data
+
+            const parcels = data.parcels;
+            playerParcels = parcels;
+            createDeliveryScreen(parcels); // Create new parcel delivery screen
+            Map.changePlayerMarkerLocation(parcel.location);
+        }
+
+    } catch (error) {
+        console.error('Unexpected error occurred', error);
+    }
 }
 
 /**
@@ -125,13 +188,17 @@ function createDeliveryScreen(parcels) {
 
     // Create new li element for every parcel
     parcels.forEach((parcel) => {
-        const liElement = document.createElement('li');
-        liElement.textContent = `${parcel.item}, ${parcel.destination_country}`; // Example 'Foliota, Sweden'
+        if (parcel.delivered) {
+            // TODO. How we will show parcels that are delivered
+        } else {
+            const liElement = document.createElement('li');
+            liElement.textContent = `${parcel.item}, ${parcel.destination_country}`; // Example 'Foliota, Sweden'
 
-        // Add click listener to the element
-        addParcelElementClickListener(liElement, parcel)
+            // Add click listener to the element
+            addParcelElementClickListener(liElement, parcel)
 
-        ulElement.appendChild(liElement);
+            ulElement.appendChild(liElement);
+        }
     });
 
     parcelDeliveryScreenContainer.appendChild(parcelDeliveryScreen);
@@ -140,13 +207,16 @@ function createDeliveryScreen(parcels) {
 
 /**
  * Start package delivery for player
- * @param {Object} player Player data object
+ * @param {String} nameOfThePlayer Player name
+ * @param {Array<Object>} parcels Player parcels
+ * @param {Array<Number, Number} playerLocation Array with coordinates [Latitude, Longitude] 
  */
-export function start(player) {
-    playerParcels = player.parcels_picked; // Store player parcels
+export function start(nameOfThePlayer, parcels, playerLocation) {
+    playerParcels = parcels; // Store player parcels
+    playerName = nameOfThePlayer;
     clearActiveScreen(); // Clear active screen
     Map.clearMap(); // Clear game map from all markers and polylines
-    Map.createPlayerMarker(player.location); // Create player marker to the start location
+    Map.createPlayerMarker(playerLocation); // Create player marker to the start location
 
     const packageCoords = getPackageLocations(playerParcels); // Get all package delivery locations
     Map.addPackageDeliveryMarkers(packageCoords); // Add the package delivery markers to the coords
