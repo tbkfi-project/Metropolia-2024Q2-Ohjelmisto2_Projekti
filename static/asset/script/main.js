@@ -25,7 +25,7 @@ jsCheck.remove();
 startApplicationPanel();
 startApplicationScreen();
 Map.show();
-setInterval(backendPing, 200000);
+setInterval(backendPing, 5000);
 
 
 // applicationPanel: Initial State
@@ -95,7 +95,7 @@ function uiPanel() {
     const elementListItem4Paragraph = document.createElement("p");
     elementListItem4Paragraph.textContent = "backend status";
     const elementListItem4Div = document.createElement("div");
-    elementListItem4Div.setAttribute("id", "elementBackendStatusOrb");
+    elementListItem4Div.setAttribute("id", "backendStatusOrb");
 
     elementListItem4.appendChild(elementListItem4Paragraph);
     elementListItem4.appendChild(elementListItem4Div);
@@ -105,7 +105,7 @@ function uiPanel() {
 
 
     // Style DOM elements.
-    Object.assign(elementBackendStatusOrb.style, {
+    Object.assign(backendStatusOrb.style, {
         width: '1rem',
         height: '1rem',
         backgroundColor: 'green',
@@ -443,18 +443,32 @@ async function uiResultScreen() {
     elementSection.setAttribute("id", "uiActive");
     const elementHeading = document.createElement("h2");
     elementHeading.textContent = "Pisteet";
-    const elementOrderedList = document.createElement("ol");
+    const elementTable = document.createElement("table");
+    const elementTableRow = document.createElement("tr");
+    const elementTableHeader1 = document.createElement("th");
+    elementTableHeader1.textContent = "nimimerkki";
+    const elementTableHeader2 = document.createElement("th");
+    elementTableHeader2.textContent = "pisteet";
     const elementButton = document.createElement("button");
     elementButton.textContent = "palaa alkuun";
 
     uiInterface.appendChild(elementSection);
     elementSection.appendChild(elementHeading);
-    elementSection.appendChild(elementOrderedList);
+    elementSection.appendChild(elementTable);
     elementSection.appendChild(elementButton);
 
 
-    for (let s = 0; s < responseJSON["player"].length; s++) {
-        // Lisää <li> -> elementOrderedList jokaisen pelaajan pisteille
+    for (let s = 0; s < responseJSON["players"].length; s++) {
+        const elementTableRowPlayer = document.createElement("tr");
+        const elementTableData1 = document.createElement("td");
+        elementTableData1.textContent = responseJSON["players"][s]["name"];
+        const elementTableData2 = document.createElement("td");
+        elementTableData2.textContent = responseJSON["players"][s]["score"];
+
+        elementTable.appendChild(elementTableRowPlayer);
+        elementTableRowPlayer.appendChild(elementTableData1);
+        elementTableRowPlayer.appendChild(elementTableData2);
+        elementTableRowPlayer.appendChild(elementTableData3);
     }
 
     // Add DOM Event Listeners
@@ -483,21 +497,46 @@ async function uiHiscores() {
     elementSection.setAttribute("id", "uiActive");
     const elementHeading = document.createElement("h2");
     elementHeading.textContent = "Hiscores";
-    const elementOrderedList = document.createElement("ol");
+    const elementTable = document.createElement("table");
+    const elementTableRow = document.createElement("tr");
+    const elementTableHeader1 = document.createElement("th");
+    elementTableHeader1.textContent = "sija";
+    const elementTableHeader2 = document.createElement("th");
+    elementTableHeader2.textContent = "nimimerkki";
+    const elementTableHeader3 = document.createElement("th");
+    elementTableHeader3.textContent = "pisteet";
+    const elementTableHeader4 = document.createElement("th");
+    elementTableHeader4.textContent = "sessio";
     const elementButton = document.createElement("button");
     elementButton.textContent = "palaa valikkoon";
 
     uiInterface.appendChild(elementSection);
     elementSection.appendChild(elementHeading);
-    elementSection.appendChild(elementOrderedList);
+    elementSection.appendChild(elementTable);
+    elementTable.appendChild(elementTableRow);
+    elementTableRow.appendChild(elementTableHeader1);
+    elementTableRow.appendChild(elementTableHeader2);
+    elementTableRow.appendChild(elementTableHeader3);
+    elementTableRow.appendChild(elementTableHeader4);
     elementSection.appendChild(elementButton);
 
 
     for (let s = 0; s < responseJSON["highscores"].length; s++) {
-        const elementListItem = document.createElement("li");
-        elementListItem.textContent = `${responseJSON["highscores"][s]["name"]} - ${responseJSON["highscores"][s]["score"]}`;
+        const elementTableRowPlayer = document.createElement("tr");
+        const elementTableData1 = document.createElement("td");
+        elementTableData1.textContent = s + 1;
+        const elementTableData2 = document.createElement("td");
+        elementTableData2.textContent = responseJSON["highscores"][s]["name"];
+        const elementTableData3 = document.createElement("td");
+        elementTableData3.textContent = responseJSON["highscores"][s]["score"];
+        const elementTableData4 = document.createElement("td");
+        elementTableData4.textContent = responseJSON["highscores"][s]["gameID"];
 
-        elementOrderedList.appendChild(elementListItem);
+        elementTable.appendChild(elementTableRowPlayer);
+        elementTableRowPlayer.appendChild(elementTableData1);
+        elementTableRowPlayer.appendChild(elementTableData2);
+        elementTableRowPlayer.appendChild(elementTableData3);
+        elementTableRowPlayer.appendChild(elementTableData4);
     }
 
     // Add DOM Event Listeners
@@ -516,18 +555,17 @@ async function uiHiscores() {
 
 // Other
 async function backendPing() {
-    const elementOrb = document.querySelector("#elementBackendStatusOrb");
+    const elementOrb = document.querySelector("#backendStatusOrb");
     try {
         const response = await fetch("http://127.0.0.1:3333/game/check_connection");
-        //console.log(response);
+        // console.log("ping: backend response", response);
 
         if (response.ok) {
-            elementOrb.style.backgroundColor = "green";
-        } else {
-            elementOrb.style.backgroundColor = "red";
+            backendStatusOrb.style.backgroundColor = "green";
         }
     } catch (error) {
-        console.error("error: ping backend", error);
+        // console.error("error: backend response", error);
+        backendStatusOrb.style.backgroundColor = "red";
     }
 }
 
