@@ -4,7 +4,6 @@ import { versionNumber } from './main.js'
 
 import * as Delivery from './packageDelivery.js'
 import * as Selection from './packageSelection.js'
-//import * as Results from './packageResults.js'
 
 const players = [];
 let gameData;
@@ -313,9 +312,10 @@ export function uiPlayerSelection() {
                     alert("Vuorosi on päättynyt!");
                 }
                 // GAME PHASE 2: PARCEL DELIVERY
-                Delivery.startMultiplayer(gameData.players);
+                await Delivery.startMultiplayer(gameData.players);
                 
-                // GAME PHASE 3: PARCEL RESULTS
+                // END SCREEN: RESULTS
+                uiResultScreen();
                 
             } catch (error) {
                 console.log(error);
@@ -464,26 +464,39 @@ export async function gameStartNew(playerList) {
 // UI: Results Screen
 async function uiResultScreen() {
     uiActiveClear();
-    const response = await fetch("");
+    const response = await fetch("http://127.0.0.1:3333/game/end_game");
     const responseJSON = await response.json();
+    console.log(responseJSON["highscores"]);
 
     // Create DOM elements.
     const elementSection = document.createElement("section");
     elementSection.setAttribute("id", "uiActive");
     const elementHeading = document.createElement("h2");
-    elementHeading.textContent = "Pisteet";
+    elementHeading.textContent = "Tulokset";
     const elementTable = document.createElement("table");
     const elementTableRow = document.createElement("tr");
     const elementTableHeader1 = document.createElement("th");
     elementTableHeader1.textContent = "nimimerkki";
     const elementTableHeader2 = document.createElement("th");
     elementTableHeader2.textContent = "pisteet";
+    const elementTableHeader3 = document.createElement("th");
+    elementTableHeader3.textContent = "co2";
+    const elementTableHeader4 = document.createElement("th");
+    elementTableHeader4.textContent = "distance traveled (km)";
+    const elementTableHeader5 = document.createElement("th");
+    elementTableHeader5.textContent = "time traveled (s)";
     const elementButton = document.createElement("button");
-    elementButton.textContent = "palaa alkuun";
+    elementButton.textContent = "palaa valikkoon";
 
     uiInterface.appendChild(elementSection);
     elementSection.appendChild(elementHeading);
     elementSection.appendChild(elementTable);
+    elementTable.appendChild(elementTableRow);
+    elementTableRow.appendChild(elementTableHeader1);
+    elementTableRow.appendChild(elementTableHeader2);
+    elementTableRow.appendChild(elementTableHeader3);
+    elementTableRow.appendChild(elementTableHeader4);
+    elementTableRow.appendChild(elementTableHeader5);
     elementSection.appendChild(elementButton);
 
 
@@ -491,13 +504,39 @@ async function uiResultScreen() {
         const elementTableRowPlayer = document.createElement("tr");
         const elementTableData1 = document.createElement("td");
         elementTableData1.textContent = responseJSON["players"][s]["name"];
-        const elementTableData2 = document.createElement("td");
-        elementTableData2.textContent = responseJSON["players"][s]["score"];
+            
+            if (!responseJSON["players"]["gameover"]) {
+                const elementTableData2 = document.createElement("td");
+                elementTableData2.textContent = responseJSON["players"][s]["score"];
+                const elementTableData3 = document.createElement("td");
+                elementTableData3.textContent = Math.ceil( responseJSON["players"][s]["co2_produced"] );
+                const elementTableData4 = document.createElement("td");
+                elementTableData4.textContent = Math.ceil( responseJSON["players"][s]["distance_traveled"] );
+                const elementTableData5 = document.createElement("td");
+                elementTableData5.textContent = Math.ceil( responseJSON["players"][s]["time_traveled"] );
 
+                elementTableRowPlayer.appendChild(elementTableData1);
+                elementTableRowPlayer.appendChild(elementTableData2);
+                elementTableRowPlayer.appendChild(elementTableData3);
+                elementTableRowPlayer.appendChild(elementTableData4);
+                elementTableRowPlayer.appendChild(elementTableData5);
+        } else {
+                const elementTableData2 = document.createElement("td");
+                elementTableData2.textContent = "GAME OVER";
+                const elementTableData3 = document.createElement("td");
+                elementTableData3.textContent = "GAME OVER";
+                const elementTableData4 = document.createElement("td");
+                elementTableData4.textContent = "GAME OVER";
+                const elementTableData5 = document.createElement("td");
+                elementTableData5.textContent = "GAME OVER";
+
+                elementTableRowPlayer.appendChild(elementTableData1);
+                elementTableRowPlayer.appendChild(elementTableData2);
+                elementTableRowPlayer.appendChild(elementTableData3);
+                elementTableRowPlayer.appendChild(elementTableData4);
+                elementTableRowPlayer.appendChild(elementTableData5);
+        }
         elementTable.appendChild(elementTableRowPlayer);
-        elementTableRowPlayer.appendChild(elementTableData1);
-        elementTableRowPlayer.appendChild(elementTableData2);
-        elementTableRowPlayer.appendChild(elementTableData3);
     }
 
     // Add DOM Event Listeners
