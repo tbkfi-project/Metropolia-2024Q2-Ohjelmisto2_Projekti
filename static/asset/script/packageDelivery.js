@@ -341,10 +341,28 @@ async function turnWaiter() {
 }
 
 /**
- * Start multiplayer game
- * @param {Array<Object>} players Array of players
+ * Remove players from array that has 'gameover: true'
+ * @param {Array<Object>} players Array of player objects
+ * @returns {Array<Object>}
  */
-export async function startMultiplayer(players) {
+function removeGameEndedPlayers(players) {
+    let playingPlayers = [];
+
+    players.forEach((player) => {
+        if (!player.gameover) {
+            playingPlayers.push(player);
+        }
+    })
+
+    return playingPlayers;
+}
+
+/**
+ * Start multiplayer game
+ * @param {Array<Object>} playerArray Array of players
+ */
+export async function startMultiplayer(playerArray) {
+    const players = removeGameEndedPlayers(playerArray);
     for (let i = 0; i < players.length; i++) {
         const { timerError, success } = await resetPlayerTimer();
 
