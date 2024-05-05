@@ -354,6 +354,8 @@ export async function startMultiplayer(players) {
 
         await turnWaiter(); // Wait until current player turn is over
     }
+    Map.changeScreenType('default');
+    Map.clearMap();
     /*
         All players have now played. Call endscreen here
     */
