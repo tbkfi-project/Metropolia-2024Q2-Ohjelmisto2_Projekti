@@ -303,21 +303,25 @@ export function uiPlayerSelection() {
     });
 
     document.querySelector(".ButtonSelectionStartGame").addEventListener("click", async () => {
-        try {
-            gameData = await gameStartNew(players);
+        if (players.length != 0) {
+            try {
+                gameData = await gameStartNew(players);
 
-            // GAME PHASE 1: PARCEL SELECTION
-            for (let i = 0; i < gameData["players"].length; i++) {
-                await Selection.turnStart(gameData, i);
-                alert("Vuorosi on päättynyt!");
+                // GAME PHASE 1: PARCEL SELECTION
+                for (let i = 0; i < gameData["players"].length; i++) {
+                    await Selection.turnStart(gameData, i);
+                    alert("Vuorosi on päättynyt!");
+                }
+                // GAME PHASE 2: PARCEL DELIVERY
+                Delivery.startMultiplayer(gameData.players);
+                
+                // GAME PHASE 3: PARCEL RESULTS
+                
+            } catch (error) {
+                console.log(error);
             }
-            // GAME PHASE 2: PARCEL DELIVERY
-            Delivery.startMultiplayer(gameData.players);
-            
-            // GAME PHASE 3: PARCEL RESULTS
-            
-        } catch (error) {
-            console.log(error);
+        } else {
+            alert("Lisää pelaajat!");
         }
     });
 
