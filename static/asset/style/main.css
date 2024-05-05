@@ -79,12 +79,6 @@ main {
   height: calc(100% - 3rem);
 }
 
-#applicationScreen {}
-
-#applicationScreenMap {}
-
-#applicationScreenInterface {}
-
 #uiInterface {
   width: 100vw;
   height: 100vh;
@@ -286,25 +280,55 @@ h4 {
   position: absolute;
 }
 
+.game-ui {
+  height: 25vh !important;
+  background: var(--colour-white);
+  display: flex;
+  justify-content: center;
+}
+
 .game-map {
   position: relative !important;
   height: 70vh !important;
 }
 
 .parcel-delivery-screen-container {
-  background-color: var(--colour-white);
+  width: 90% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  position: relative !important;
+  background: var(--colour-white);
+  display: block !important;
+  justify-content: baseline !important;
+  overflow-y: auto !important;
 }
 
 .parcel-delivery-screen {
-  padding: 1em;
+  padding: 3vh 4vh 3vh 4vh;
 }
 
 .parcel-delivery-list li {
-  padding: .5em;
-  margin: .5em;
+  margin-top: 1.3vh;
+  padding: 1.3vh;
+  font-size: 1.3em;
+  border-radius: 20px;
   color: var(--colour-white);
-  border-radius: 10px;
-  background-color: var(--colour-secondary);
+  background: var(--colour-secondary);
+}
+
+.travel-type-ul {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.travel-type-ul li {
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  font-size: 1.2em;
+  color: var(--colour-black);
+  margin: 1vh;
 }
 
 /* Default settings for elements */

@@ -25,13 +25,16 @@ export function show() {
  */
 export function changeScreenType(type) {
     const mapElement = document.querySelector('#map');
+    const uiInterface = document.querySelector('#uiInterface');
     switch (type) {
         case 'game':
             mapElement.classList.add('game-map');
+            uiInterface.classList.add('game-ui');
             break;
 
         case 'default':
             mapElement.classList.remove('game-map');
+            uiInterface.classList.remove('game-ui');
             break;
 
         default:
