@@ -88,6 +88,17 @@ async function callParcelDeliveryEndpoint(playerName, parcelIndex, flightType) {
 }
 
 /**
+ * Check if player has delivered all parcels
+ * @param {Array<Object>} parcels Array of parcel objects
+ * @returns {Boolean}
+ */
+function checkIfAllParcelsAreDelivered(parcels) {
+    return parcels.every((parcel) => {
+        return parcel.delivered;
+    });
+}
+
+/**
  * Start parcel delivery
  * @param {Object} parcel Deliverable parcel object
  * @param {Number} flightType Flight type (number)  
@@ -116,8 +127,8 @@ async function deliverParcel(parcel, flightType) {
             document.querySelector('#uiActive').remove(); // Remove current delivery screen so it can be regenerated with new data
 
             const parcels = data.parcels;
-            if (parcels.length <= 0) {
-                alert('Vuorosi loppui');
+            if (checkIfAllParcelsAreDelivered(parcels)) {
+                alert('Toimitit kaikki paketit annetussa ajassa! Vuorosi loppuu.');
                 turnOver = true;
                 return;
             } else {
