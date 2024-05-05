@@ -356,7 +356,6 @@ export async function startMultiplayer(players) {
     }
     Map.changeScreenType('default');
     Map.clearMap();
-    /*
-        All players have now played. Call endscreen here
-    */
+
+    return true; // Returns true, because game is now over
 }
