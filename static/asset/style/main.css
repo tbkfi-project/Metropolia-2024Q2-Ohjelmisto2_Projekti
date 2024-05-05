@@ -81,7 +81,7 @@ main {
 
 #uiInterface {
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 3rem);
 }
 
 #uiActive {
@@ -275,13 +275,13 @@ h4 {
 }
 
 #map {
-  height: 96vh;
+  height: calc(100vh - 3rem);
   width: 100vw;
   position: absolute;
 }
 
 .game-ui {
-  height: 25vh !important;
+  height: 30vh !important;
   background: var(--colour-white);
   display: flex;
   justify-content: center;
@@ -289,7 +289,7 @@ h4 {
 
 .game-map {
   position: relative !important;
-  height: 70vh !important;
+  height: calc(70vh - 3rem) !important;
 }
 
 .parcel-delivery-screen-container {
