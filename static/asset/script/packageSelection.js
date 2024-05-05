@@ -13,6 +13,17 @@ async function turnEnd(currentTurnStart, currentTurnEnd, currentTurnLimit) {
         const turnEndTimer = setInterval( () => { // setInterval repeats until 1: parcels selected, 2: time is up. -> ends the player's turn.
             console.log("turn elapsed:", Date.now() - currentTurnStart * 1000)
 
+            // Turn clock
+            document.querySelector("#TurnClock").textContent = Math.floor( (currentTurnEnd*1000 - Date.now()) / 1000 );
+            if (document.querySelector("#TurnClock").textContent <= 20 && document.querySelector("#TurnClock").textContent > 10) {
+                document.querySelector("#TurnClock").style.color = "yellow";
+            } else if (document.querySelector("#TurnClock").textContent <= 10 && document.querySelector("#TurnClock").textContent != 0) {
+                document.querySelector("#TurnClock").style.color = "red";
+            } else if (document.querySelector("#TurnClock").textContent == 0) {
+                document.querySelector("#TurnClock").style.color = "grey";
+            }
+
+
             if (parcelSelected.length === 5) {
                 clearInterval(turnEndTimer);
                 parcelSelected = ""
@@ -55,9 +66,20 @@ export async function turnStart(data, i) {
     elementHeading2.textContent = gameData["players"][i]["name"];
     const elementOrderedList = document.createElement("ul");
 
+    // TurnClock
+    const elementClock = document.createElement("section");
+    elementClock.setAttribute("id", "TurnClock");
+    const elementClockText = document.createElement("p");
+    elementClockText.textContent = currentTurnLimit;
+
     uiInterface.appendChild(elementSection);
     elementSection.appendChild(elementHeading1);
     elementSection.appendChild(elementHeading2);
+    
+    elementSection.appendChild(elementClock);
+    elementClock.appendChild(elementClockText);
+    elementClock.style.color = "green";
+
     elementSection.appendChild(elementOrderedList);
 
 
