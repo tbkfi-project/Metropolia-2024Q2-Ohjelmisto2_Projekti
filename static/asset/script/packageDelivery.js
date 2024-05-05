@@ -88,6 +88,17 @@ async function callParcelDeliveryEndpoint(playerName, parcelIndex, flightType) {
 }
 
 /**
+ * Check if player has delivered all parcels
+ * @param {Array<Object>} parcels Array of parcel objects
+ * @returns {Boolean}
+ */
+function checkIfAllParcelsAreDelivered(parcels) {
+    return parcels.every((parcel) => {
+        return parcel.delivered;
+    });
+}
+
+/**
  * Start parcel delivery
  * @param {Object} parcel Deliverable parcel object
  * @param {Number} flightType Flight type (number)  
@@ -116,8 +127,8 @@ async function deliverParcel(parcel, flightType) {
             document.querySelector('#uiActive').remove(); // Remove current delivery screen so it can be regenerated with new data
 
             const parcels = data.parcels;
-            if (parcels.length <= 0) {
-                alert('Vuorosi loppui');
+            if (checkIfAllParcelsAreDelivered(parcels)) {
+                alert('Toimitit kaikki paketit annetussa ajassa! Vuorosi loppuu.');
                 turnOver = true;
                 return;
             } else {
@@ -264,6 +275,32 @@ async function getPlayerParcels(playerName) {
 }
 
 /**
+ * Reset game timer before next player starts delivery
+ */
+async function resetPlayerTimer() {
+    try {
+        const response = await fetch('http://127.0.0.1:3333/game/start_new_time?seconds=100');
+
+        if (!response.ok) {
+            return {
+                error: Error(`Response was not 200. Returned response code was: ${response.status}`),
+                success: false,
+            };
+        }
+
+        return {
+            error: null,
+            success: true,
+        };
+    } catch (error) {
+        return {
+            error: error,
+            success: false,
+        };
+    }
+}
+
+/**
  * Turn waiter. Used to set startMultiplayer() to sleep until current player turn is over.
  */
 async function turnWaiter() {
@@ -284,11 +321,24 @@ async function turnWaiter() {
  */
 export async function startMultiplayer(players) {
     for (let i = 0; i < players.length; i++) {
-        const { error, data } = await getPlayerParcels(players[i].name);
+        const { timerError, success } = await resetPlayerTimer();
 
         try {
-            if (error) {
-                console.error('Error occurred in getPlayerParcels()', error);
+            if (timerError) {
+                console.error('Error occurred in resetPlayerTimer()', timerError);
+                turnOver = true;
+                return;
+            }
+        } catch (error) {
+            console.error('Unexpected error occurred', error);
+            turnOver = true;
+        }
+
+        const { parcelError, data } = await getPlayerParcels(players[i].name);
+
+        try {
+            if (parcelError) {
+                console.error('Error occurred in getPlayerParcels()', parcelError);
                 turnOver = true
                 return;
             }
@@ -304,4 +354,7 @@ export async function startMultiplayer(players) {
 
         await turnWaiter(); // Wait until current player turn is over
     }
+    /*
+        All players have now played. Call endscreen here
+    */
 }
