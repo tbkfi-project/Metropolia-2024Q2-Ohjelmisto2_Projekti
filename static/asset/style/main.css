@@ -154,7 +154,7 @@ h2 {
 
 .highscore-return-btn:hover {
   color: red;
-  background-color: var(--colour-grey);
+  background-color: var(--colour-grey) !important;
 }
 
 .player-add-input-list {
@@ -329,6 +329,34 @@ h4 {
   font-size: 1.2em;
   color: var(--colour-black);
   margin: 1vh;
+}
+
+.end-screen-table {
+  margin-top: 2vh;
+  width: 80vw;
+  text-align: left;
+}
+
+.end-screen-table tr {
+  color: var(--colour-white);
+  font-size: 1.2em;
+}
+
+.end-screen-return-btn {
+  all: unset;
+  margin-top: 2vh;
+  padding: 1vh;
+  width: 15vw;
+  font-size: 1.4em;
+  text-align: center;
+  color: var(--colour-white);
+  background: var(--colour-grey);
+  border-radius: 10px;
+}
+
+.highscore-return-btn:hover {
+  color: red;
+  background-color: var(--colour-grey) !important;
 }
 
 /* Default settings for elements */
