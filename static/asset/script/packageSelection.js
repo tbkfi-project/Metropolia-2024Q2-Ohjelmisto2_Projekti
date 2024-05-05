@@ -9,12 +9,12 @@ let parcelSelected = "";
 
 
 async function turnEnd(currentTurnStart, currentTurnEnd, currentTurnLimit) {
-    await new Promise( (resolve) => {
-        const turnEndTimer = setInterval( () => { // setInterval repeats until 1: parcels selected, 2: time is up. -> ends the player's turn.
+    await new Promise((resolve) => {
+        const turnEndTimer = setInterval(() => { // setInterval repeats until 1: parcels selected, 2: time is up. -> ends the player's turn.
             console.log("turn elapsed:", Date.now() - currentTurnStart * 1000)
 
             // Turn clock
-            document.querySelector("#TurnClock").textContent = Math.floor( (currentTurnEnd*1000 - Date.now()) / 1000 );
+            document.querySelector("#TurnClock").textContent = Math.floor((currentTurnEnd * 1000 - Date.now()) / 1000);
             if (document.querySelector("#TurnClock").textContent <= 20 && document.querySelector("#TurnClock").textContent > 10) {
                 document.querySelector("#TurnClock").style.color = "yellow";
             } else if (document.querySelector("#TurnClock").textContent <= 10 && document.querySelector("#TurnClock").textContent != 0) {
@@ -28,16 +28,16 @@ async function turnEnd(currentTurnStart, currentTurnEnd, currentTurnLimit) {
                 clearInterval(turnEndTimer);
                 parcelSelected = ""
                 uiActiveClear();
-                
+
                 resolve();
             } else if (Date.now() - currentTurnStart * 1000 > currentTurnLimit * 1000) {
                 clearInterval(turnEndTimer);
                 parcelSelected = ""
                 uiActiveClear();
-                
+
                 const response = fetch(`http://127.0.0.1:3333/game/game_over?player=${gameData["players"][currentPlayer]["name"]}`);
                 console.log("gameover", response);
-                
+
                 resolve();
             }
         }, 1000);
@@ -49,7 +49,7 @@ export async function turnStart(data, i) {
     gameData = data;
     currentPlayer = i;
     currentPlayerName = gameData["players"][i]["name"];
-    
+
     alert(currentPlayerName + ", vuorosi on alkamassa!");
     const response = await fetch("http://127.0.0.1:3333/game/start_new_time?seconds=30");
     const responseJSON = await response.json();
@@ -60,11 +60,14 @@ export async function turnStart(data, i) {
     // Create DOM elements.
     const elementSection = document.createElement("section");
     elementSection.setAttribute("id", "uiActive");
+    const elementContainer = document.createElement('div');
+    elementContainer.classList.add('container');
     const elementHeading1 = document.createElement("h2");
     elementHeading1.textContent = "Valitse pakettisi!";
     const elementHeading2 = document.createElement("h3");
     elementHeading2.textContent = gameData["players"][i]["name"];
     const elementOrderedList = document.createElement("ul");
+    elementOrderedList.classList.add('parcel-selection-list');
 
     // TurnClock
     const elementClock = document.createElement("section");
@@ -72,15 +75,16 @@ export async function turnStart(data, i) {
     const elementClockText = document.createElement("p");
     elementClockText.textContent = currentTurnLimit;
 
-    uiInterface.appendChild(elementSection);
-    elementSection.appendChild(elementHeading1);
-    elementSection.appendChild(elementHeading2);
-    
-    elementSection.appendChild(elementClock);
+    elementContainer.appendChild(elementHeading1);
+    elementContainer.appendChild(elementHeading2);
+
+    elementContainer.appendChild(elementClock);
     elementClock.appendChild(elementClockText);
     elementClock.style.color = "green";
 
-    elementSection.appendChild(elementOrderedList);
+    elementContainer.appendChild(elementOrderedList);
+    elementSection.appendChild(elementContainer);
+    uiInterface.appendChild(elementSection);
 
 
     for (let p = 0; p < gameData["parcels"].length; p++) {
@@ -107,13 +111,6 @@ export async function turnStart(data, i) {
         elementListItem.addEventListener("click", parcelSelectListener);    // Each parcel is chosen via this listener!
     }
 
-    // Style DOM elements
-    Object.assign(elementSection.style, {
-        zIndex: '1',
-        position: 'absolute',
-        color: 'white',
-    });
-
     // Wait for turn to be over
     await turnEnd(currentTurnStart, currentTurnEnd, currentTurnLimit);
 }
@@ -127,9 +124,7 @@ async function parcelSelectListener(event) {
         console.log(`${gameData["players"][currentPlayer]["name"]} added index ${this.id} to parcels:`, parcelSelected, parcelSelected.length);
 
         // Style DOM elements (after entry has been selected by player!)
-        Object.assign(elementClicked.style, {
-            color: 'red',
-        });
+        elementClicked.classList.add('selected-parcel');
 
         if (parcelSelected.length === 5) { // If all 5 parcels selected, notify backend.
             try {
