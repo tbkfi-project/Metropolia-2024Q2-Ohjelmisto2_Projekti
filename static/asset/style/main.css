@@ -85,9 +85,158 @@ main {
 
 #applicationScreenInterface {}
 
+#uiInterface {
+  width: 100vw;
+  height: 100vh;
+}
+
 #uiActive {
-  backdrop-filter: blur(10px);
   z-index: 9999;
+  width: 100%;
+  margin-top: 7vh;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+}
+
+#uiActive .container {
+  padding: 8vh;
+  background: #303030d2;
+  border-radius: 20px;
+}
+
+h2 {
+  color: var(--colour-white);
+  font-size: 3em;
+}
+
+.main-button-list {
+  margin-top: 5vh;
+  width: 100%;
+}
+
+.main-button-list li {
+  padding: .5vh;
+  margin-top: 1.5vh;
+  display: flex;
+  justify-content: center;
+}
+
+.main-button-list li button {
+  width: 100%;
+  all: unset;
+  padding: 1.5vh;
+  font-size: 2em;
+  border-radius: 20px;
+  color: var(--colour-white);
+  background: var(--colour-grey);
+}
+
+.highscore-table {
+  margin-top: 2vh;
+  width: 30vw;
+  text-align: left;
+}
+
+.highscore-table tr {
+  color: var(--colour-white);
+  font-size: 1.2em;
+}
+
+.highscore-return-btn {
+  all: unset;
+  margin-top: 2vh;
+  padding: 1vh;
+  width: 15vw;
+  font-size: 1.4em;
+  text-align: center;
+  color: var(--colour-white);
+  background: var(--colour-grey);
+  border-radius: 10px;
+}
+
+.highscore-return-btn:hover {
+  color: red;
+  background-color: var(--colour-grey);
+}
+
+.player-add-input-list {
+  margin-top: 5vh;
+  width: 100%;
+}
+
+.player-add-input-list li {
+  padding: .5vh;
+  margin-top: .5vh;
+  display: flex;
+  justify-content: center;
+}
+
+.player-add-input-list li input {
+  padding: 1.2vh;
+  border: none;
+  border-radius: 20px;
+}
+
+.player-add-input-list li button {
+  width: 100%;
+  all: unset;
+  padding: 1vh;
+  font-size: 1.5em;
+  border-radius: 20px;
+  color: var(--colour-white);
+  background: var(--colour-grey);
+}
+
+.ButtonSelectionStartGame {
+  background: var(--colour-tertiary) !important;
+}
+
+.ButtonSelectionBack {
+  background: red !important;
+}
+
+.ButtonSelectionPlayerAdd:hover {
+  background: var(--colour-tertiary);
+}
+
+.ButtonSelectionStartGame:hover {
+  background: var(--colour-grey) !important;
+}
+
+.ButtonSelectionBack:hover {
+  background: var(--colour-grey) !important;
+}
+
+.players {
+  margin-top: 3vh;
+  width: 100%;
+}
+
+.players li {
+  margin-top: .7vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.players li p {
+  color: var(--colour-white);
+  font-size: 1.5em;
+}
+
+.players li button {
+  all: unset;
+  margin-left: auto;
+  font-size: 1.2em;
+  padding: .5vh;
+  color: var(--colour-white);
+  background: red;
+  border-radius: 10px;
+}
+
+.players li button:hover {
+  background: var(--colour-grey);
 }
 
 #map {

@@ -86,12 +86,16 @@ export function uiMainMenu() {
     // Create DOM elements.
     const elementSection = document.createElement("section");
     elementSection.setAttribute("id", "uiActive");
+    const elementContainer = document.createElement('div');
+    elementContainer.classList.add('container');
     const elementSectionHeading = document.createElement("h2");
     elementSectionHeading.textContent = "Päävalikko";
     const elementSectionUnorderedList = document.createElement("ul");
+    elementSectionUnorderedList.classList.add('main-button-list')
 
-    elementSection.appendChild(elementSectionHeading);
-    elementSection.appendChild(elementSectionUnorderedList);
+    elementContainer.appendChild(elementSectionHeading);
+    elementContainer.appendChild(elementSectionUnorderedList);
+    elementSection.appendChild(elementContainer)
     uiInterface.appendChild(elementSection);
 
 
@@ -115,50 +119,6 @@ export function uiMainMenu() {
     // Add DOM Eeventlisteners.
     elementButton1.addEventListener('click', uiPlayerSelection);
     elementButton2.addEventListener('click', uiHiscores);
-
-    // Style DOM elements.
-    Object.assign(elementSection.style, {
-        zIndex: '1',
-        position: 'absolute',
-        width: '60%',
-        maxWidth: '500px',
-        height: '50%',
-        minHeight: '300px',
-        maxHeight: '550px',
-        backgroundColor: 'rgba(48,48,48,0.80)',
-        color: 'white',
-        borderRadius: '1rem',
-        padding: '1.5rem'
-    });
-
-    Object.assign(elementSectionHeading.style, {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '5rem',
-        padding: '0.5rem',
-        fontSize: '3rem'
-    });
-
-    Object.assign(elementSectionUnorderedList.style, {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        width: '100%',
-        height: '100%'
-    });
-
-    Object.assign(elementButton1.style, {
-        width: '12rem',
-        height: '4rem',
-        margin: '0.75rem'
-    });
-
-    Object.assign(elementButton2.style, {
-        width: '12rem',
-        height: '4rem',
-        margin: '0.75rem'
-    });
 }
 
 // UI: Hiscores
@@ -171,9 +131,12 @@ async function uiHiscores() {
     // Create DOM elements.
     const elementSection = document.createElement("section");
     elementSection.setAttribute("id", "uiActive");
+    const elementContainer = document.createElement('div');
+    elementContainer.classList.add('container');
     const elementHeading = document.createElement("h2");
     elementHeading.textContent = "Hiscores";
     const elementTable = document.createElement("table");
+    elementTable.classList.add('highscore-table');
     const elementTableRow = document.createElement("tr");
     const elementTableHeader1 = document.createElement("th");
     elementTableHeader1.textContent = "sija";
@@ -185,17 +148,19 @@ async function uiHiscores() {
     elementTableHeader4.textContent = "sessio";
     const elementButton = document.createElement("button");
     elementButton.textContent = "palaa valikkoon";
+    elementButton.classList.add('highscore-return-btn');
 
-    uiInterface.appendChild(elementSection);
-    elementSection.appendChild(elementHeading);
-    elementSection.appendChild(elementTable);
+    elementContainer.appendChild(elementHeading);
+    elementContainer.appendChild(elementTable);
     elementTable.appendChild(elementTableRow);
     elementTableRow.appendChild(elementTableHeader1);
     elementTableRow.appendChild(elementTableHeader2);
     elementTableRow.appendChild(elementTableHeader3);
     elementTableRow.appendChild(elementTableHeader4);
-    elementSection.appendChild(elementButton);
+    elementContainer.appendChild(elementButton);
 
+    elementSection.appendChild(elementContainer);
+    uiInterface.appendChild(elementSection);
 
     for (let s = 0; s < responseJSON["highscores"].length; s++) {
         const elementTableRowPlayer = document.createElement("tr");
@@ -219,14 +184,6 @@ async function uiHiscores() {
     elementButton.addEventListener("click", () => {
         uiMainMenu();
     });
-
-    // Style DOM elements
-    Object.assign(elementSection.style, {
-        zIndex: '1',
-        position: 'absolute',
-        color: 'white',
-    });
-
 }
 
 // UI: Player selection
@@ -236,13 +193,17 @@ export function uiPlayerSelection() {
     // Create DOM elements.
     const elementSection = document.createElement("section");
     elementSection.setAttribute("id", "uiActive");
+    const elementContainer = document.createElement('div');
+    elementContainer.classList.add('container');
     const elementHeading1 = document.createElement("h2");
     elementHeading1.textContent = "Liity peliin";
     const elementUnorderedList1 = document.createElement("ul");
+    elementUnorderedList1.classList.add('player-add-input-list')
 
-    elementSection.appendChild(elementHeading1);
+    elementContainer.appendChild(elementHeading1);
+    elementContainer.appendChild(elementUnorderedList1);
+    elementSection.appendChild(elementContainer);
     uiInterface.appendChild(elementSection);
-    elementSection.appendChild(elementUnorderedList1);
 
 
     const elementListItem1 = document.createElement("li");
@@ -250,6 +211,7 @@ export function uiPlayerSelection() {
     elementInput.setAttribute("name", "playerName");
     elementInput.setAttribute("class", "FieldSelectionPlayerAdd");
     elementInput.setAttribute("type", "text");
+    elementInput.placeholder = 'Anna pelaajan nimi';
 
     elementListItem1.appendChild(elementInput);
     elementUnorderedList1.appendChild(elementListItem1);
@@ -287,7 +249,7 @@ export function uiPlayerSelection() {
     elementHeading2.textContent = "Pelaajalista";
 
     elementUnorderedList2.setAttribute("class", "players");
-    elementSection.appendChild(elementUnorderedList2);
+    elementContainer.appendChild(elementUnorderedList2);
 
     // Add DOM Eeventlisteners.
     document.querySelector(".ButtonSelectionPlayerAdd").addEventListener('click', () => {
@@ -314,9 +276,9 @@ export function uiPlayerSelection() {
                 }
                 // GAME PHASE 2: PARCEL DELIVERY
                 Delivery.startMultiplayer(gameData.players);
-                
+
                 // GAME PHASE 3: PARCEL RESULTS
-                
+
             } catch (error) {
                 console.log(error);
             }
@@ -329,117 +291,59 @@ export function uiPlayerSelection() {
         players.splice(0); // clear <players> before navigating back.
         uiMainMenu();
     });
-
-    // Style DOM elements.
-    Object.assign(elementSection.style, {
-        zIndex: '1',
-        position: 'absolute',
-        width: '90%',
-        height: '90%',
-        backgroundColor: 'rgba(48,48,48,0.80)',
-        color: 'white',
-        borderRadius: '1rem',
-        padding: '0'
-    });
-
-    Object.assign(elementHeading1.style, {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '5rem',
-        padding: '0.5rem',
-        fontSize: '3rem'
-    });
-
-    Object.assign(elementHeading2.style, {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '5rem',
-        padding: '0.5rem',
-        fontSize: '3rem'
-    });
-
-    Object.assign(elementUnorderedList1.style, {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        width: '100%',
-        height: 'auto'
-    });
-
-    Object.assign(elementButton1.style, {
-        width: '12rem',
-        height: '4rem',
-        margin: '0.75rem'
-    });
-
-    Object.assign(elementButton2.style, {
-        width: '12rem',
-        height: '4rem',
-        margin: '0.75rem'
-    });
-
-    Object.assign(elementUnorderedList2.style, {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        width: '100%',
-        height: 'auto'
-    });
 }
 
 // UI: Player selection (add player)
 export function playerListAddEntry(playerName) {
-	const playerList = document.querySelector('.players');
+    const playerList = document.querySelector('.players');
 
     if (players.includes(playerName)) {
-    	console.log(`error: player "${playerName}" already in list.`);
+        console.log(`error: player "${playerName}" already in list.`);
         alert('Nimimerkki on jo käytössä!');
         return false;
     } else {
-		const elementListItem = document.createElement("li");
-		elementListItem.setAttribute("id", playerName);
-		
-		const elementParagraph = document.createElement("p");
-		elementParagraph.textContent = playerName
-		
-		const elementButton = document.createElement("button");
-		elementButton.setAttribute("class", "playersRemove");
-		elementButton.setAttribute("value", playerName);
-		elementButton.textContent = "del";
+        const elementListItem = document.createElement("li");
+        elementListItem.setAttribute("id", playerName);
+
+        const elementParagraph = document.createElement("p");
+        elementParagraph.textContent = playerName
+
+        const elementButton = document.createElement("button");
+        elementButton.setAttribute("class", "playersRemove");
+        elementButton.setAttribute("value", playerName);
+        elementButton.textContent = "del";
 
         elementButton.addEventListener("click", () => {
-    		playerListRemoveEntry(elementButton.value);
-		});
+            playerListRemoveEntry(elementButton.value);
+        });
 
         elementListItem.appendChild(elementParagraph);
         elementListItem.appendChild(elementButton);
         playerList.appendChild(elementListItem);
-        
+
         players.push(playerName);
-		console.log(`success: added ${playerName} to list.`, players);
-		return true;
+        console.log(`success: added ${playerName} to list.`, players);
+        return true;
     }
 }
 
 // UI: Player selection (remove player)
 export function playerListRemoveEntry(playerName) {
-	const playerList = document.querySelector('.players');
-	const target = playerList.querySelector(`#${playerName}`);
+    const playerList = document.querySelector('.players');
+    const target = playerList.querySelector(`#${playerName}`);
 
     if (!players.includes(playerName)) {
-    	console.log(`error: player "${playerName}" not in list.`);
+        console.log(`error: player "${playerName}" not in list.`);
         return false;
     } else {
-    	const playerNameIndex = players.indexOf(playerName);
-    	if (playerNameIndex != -1) {
-    		players.splice(playerNameIndex, 1);
-    	}
-    
+        const playerNameIndex = players.indexOf(playerName);
+        if (playerNameIndex != -1) {
+            players.splice(playerNameIndex, 1);
+        }
+
         playerList.removeChild(target)
         console.log(`success: removed ${playerName} from list.`);
-	    return true;
+        return true;
     }
 }
 
@@ -450,7 +354,7 @@ export async function gameStartNew(playerList) {
         console.log("players (string):", playersString);
         const data = encodeURIComponent(playersString);
         console.log("data (tx):", data);
-        
+
         const response = await fetch(`http://127.0.0.1:3333/game/new?players=${data}`);
         console.log("data (rx):", response);
         const responseJSON = await response.json();
