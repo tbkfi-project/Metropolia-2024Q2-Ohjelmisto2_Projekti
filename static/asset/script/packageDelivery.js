@@ -211,7 +211,7 @@ function createDeliveryScreen(parcels) {
             // TODO. How we will show parcels that are delivered
         } else {
             const liElement = document.createElement('li');
-            liElement.textContent = `${parcel.item}, ${parcel.destination_country}`; // Example 'Foliota, Sweden'
+            liElement.textContent = `${parcel.item}, ${parcel.destination_country}, ${(parcel.distance_to_player).toFixed(1)}km`; // Example 'Foliota, Sweden'
 
             // Add click listener to the element
             addParcelElementClickListener(liElement, parcel)
