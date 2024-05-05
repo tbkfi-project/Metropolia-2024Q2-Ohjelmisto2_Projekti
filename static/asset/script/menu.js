@@ -29,7 +29,7 @@ export function uiPanel() {
     const elementListItem1 = document.createElement("li");
     elementListItem1.setAttribute("id", "GameLogo");
     const elementListItem1Img = document.createElement("img");
-    elementListItem1Img.setAttribute("src", "/some/image.avif");
+    elementListItem1Img.setAttribute("src", "/static/asset/parcel.png");
     elementListItem1Img.setAttribute("alt", "Pakettipilotti logo image.");
 
     elementListItem1.appendChild(elementListItem1Img);
@@ -48,7 +48,7 @@ export function uiPanel() {
     const elementListItem3 = document.createElement("li");
     elementListItem3.setAttribute("id", "GameVersion");
     const elementListItem3Paragraph = document.createElement("p");
-    elementListItem3Paragraph.textContent = `${versionNumber}`;
+    elementListItem3Paragraph.textContent = `version: ${versionNumber}`;
 
     elementListItem3.appendChild(elementListItem3Paragraph);
     applicationPanelList.appendChild(elementListItem3);
@@ -57,25 +57,16 @@ export function uiPanel() {
     const elementListItem4 = document.createElement("li");
     elementListItem4.setAttribute("id", "BackendStatus");
     const elementListItem4Paragraph = document.createElement("p");
-    elementListItem4Paragraph.textContent = "backend status";
-    const elementListItem4Div = document.createElement("div");
-    elementListItem4Div.setAttribute("id", "backendStatusOrb");
+    elementListItem4Paragraph.innerHTML = "backend status: <span style='color: SpringGreen;'>unknown</span>";
+    elementListItem4Paragraph.setAttribute("id", "backendStatusOrb");
 
     elementListItem4.appendChild(elementListItem4Paragraph);
-    elementListItem4.appendChild(elementListItem4Div);
     applicationPanelList.appendChild(elementListItem4);
 
     // Add DOM Eeventlisteners.
 
-
     // Style DOM elements.
-    Object.assign(backendStatusOrb.style, {
-        width: '1rem',
-        height: '1rem',
-        backgroundColor: 'green',
-        borderRadius: '0.50rem',
-        padding: '0'
-    });
+    elementListItem1Img.style.maxHeight = '2rem';
 }
 
 // UI: Main Menu

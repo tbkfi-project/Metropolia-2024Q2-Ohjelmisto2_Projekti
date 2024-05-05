@@ -24,12 +24,12 @@ async function backendPing() {
         // console.log("ping: backend response", response);
 
         if (response.ok) {
-            backendStatusOrb.style.backgroundColor = "green";
+            backendStatusOrb.innerHTML = "backend status: <span style='color: SpringGreen;'>up</span>";
         } else {
-            backendStatusOrb.style.backgroundColor = "red";
+            backendStatusOrb.innerHTML = "backend status: <span style='color: red;'>down</span>";
         }
     } catch (error) {
         // console.error("error: backend response", error);
-        backendStatusOrb.style.backgroundColor = "red";
+        backendStatusOrb.innerHTML = "backend status: <span style='color: red;'>down</span>";
     }
 }

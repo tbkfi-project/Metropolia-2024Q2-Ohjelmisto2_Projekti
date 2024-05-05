@@ -119,7 +119,7 @@ async function deliverParcel(parcel, flightType) {
 
         if (data) {
             if (data.game_over) {
-                alert('Vuorosi loppui');
+                alert('Aikasi loppui kesken toimituksen!');
                 turnOver = true;
                 return;
             }
