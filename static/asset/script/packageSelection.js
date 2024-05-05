@@ -36,6 +36,7 @@ async function turnEnd(currentTurnStart, currentTurnEnd, currentTurnLimit) {
                 uiActiveClear();
 
                 const response = fetch(`http://127.0.0.1:3333/game/game_over?player=${gameData["players"][currentPlayer]["name"]}`);
+                gameData["players"][currentPlayer]["gameover"] = true;
                 console.log("gameover", response);
 
                 resolve();
