@@ -277,6 +277,7 @@ export function uiPlayerSelection() {
                 await Delivery.startMultiplayer(gameData.players);
 
                 // END SCREEN: RESULTS
+                players = []
                 uiResultScreen();
 
             } catch (error) {
