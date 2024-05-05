@@ -5,7 +5,7 @@ import { versionNumber } from './main.js'
 import * as Delivery from './packageDelivery.js'
 import * as Selection from './packageSelection.js'
 
-const players = [];
+let players = [];
 let gameData;
 
 
@@ -376,9 +376,12 @@ async function uiResultScreen() {
     // Create DOM elements.
     const elementSection = document.createElement("section");
     elementSection.setAttribute("id", "uiActive");
+    const elementContainer = document.createElement('div');
+    elementContainer.classList.add('container');
     const elementHeading = document.createElement("h2");
     elementHeading.textContent = "Tulokset";
     const elementTable = document.createElement("table");
+    elementTable.classList.add('end-screen-table');
     const elementTableRow = document.createElement("tr");
     const elementTableHeader1 = document.createElement("th");
     elementTableHeader1.textContent = "nimimerkki";
@@ -392,17 +395,19 @@ async function uiResultScreen() {
     elementTableHeader5.textContent = "time traveled (s)";
     const elementButton = document.createElement("button");
     elementButton.textContent = "palaa valikkoon";
+    elementButton.classList.add('end-screen-return-btn');
 
-    uiInterface.appendChild(elementSection);
-    elementSection.appendChild(elementHeading);
-    elementSection.appendChild(elementTable);
+    elementContainer.appendChild(elementHeading);
+    elementContainer.appendChild(elementTable);
     elementTable.appendChild(elementTableRow);
     elementTableRow.appendChild(elementTableHeader1);
     elementTableRow.appendChild(elementTableHeader2);
     elementTableRow.appendChild(elementTableHeader3);
     elementTableRow.appendChild(elementTableHeader4);
     elementTableRow.appendChild(elementTableHeader5);
-    elementSection.appendChild(elementButton);
+    elementContainer.appendChild(elementButton);
+    elementSection.appendChild(elementContainer);
+    uiInterface.appendChild(elementSection);
 
 
     for (let s = 0; s < responseJSON["players"].length; s++) {
@@ -447,12 +452,5 @@ async function uiResultScreen() {
     // Add DOM Event Listeners
     elementButton.addEventListener("click", () => {
         uiMainMenu();
-    });
-
-    // Style DOM elements
-    Object.assign(elementSection.style, {
-        zIndex: '1',
-        position: 'absolute',
-        color: 'white',
     });
 }

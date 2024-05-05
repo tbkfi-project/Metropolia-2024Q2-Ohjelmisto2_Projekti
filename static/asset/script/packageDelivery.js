@@ -175,12 +175,37 @@ function createTravelUlElement(parcel) {
     // Create travel options between 1 and 3
     for (let i = 1; i < 4; i++) {
         const travelLiElement = document.createElement('li');
-        travelLiElement.textContent = i;
 
         // If player clicks any of the travel options
         travelLiElement.addEventListener(('click'), () => {
-            deliverParcel(parcel, travelLiElement.textContent);
+            let flightType = 1;
+            let text = travelLiElement.textContent;
+
+            if (text.includes('Rahtikone,')) {
+                flightType = 1
+            } else if (text.includes('Matkustajakone,')) {
+                flightType = 2
+            } else {
+                flightType = 3
+            }
+
+            deliverParcel(parcel, flightType);
         });
+
+        switch (i) {
+            case (1):
+                travelLiElement.textContent = `Rahtikone, ${(parcel.travel_time.cargo_plane).toFixed(1)}s`;
+                travelLiElement.style.background = 'green';
+                break;
+            case (2):
+                travelLiElement.textContent = `Matkustajakone, ${(parcel.travel_time.passenger_plane).toFixed(1)}s`;
+                travelLiElement.style.background = 'yellow';
+                break;
+            case (3):
+                travelLiElement.textContent = `Yksityiskone, ${(parcel.travel_time.private_jet).toFixed(1)}s`;
+                travelLiElement.style.background = 'red';
+                break;
+        }
 
         travelUlElement.appendChild(travelLiElement);
     }
@@ -316,10 +341,28 @@ async function turnWaiter() {
 }
 
 /**
- * Start multiplayer game
- * @param {Array<Object>} players Array of players
+ * Remove players from array that has 'gameover: true'
+ * @param {Array<Object>} players Array of player objects
+ * @returns {Array<Object>}
  */
-export async function startMultiplayer(players) {
+function removeGameEndedPlayers(players) {
+    let playingPlayers = [];
+
+    players.forEach((player) => {
+        if (!player.gameover) {
+            playingPlayers.push(player);
+        }
+    })
+
+    return playingPlayers;
+}
+
+/**
+ * Start multiplayer game
+ * @param {Array<Object>} playerArray Array of players
+ */
+export async function startMultiplayer(playerArray) {
+    const players = removeGameEndedPlayers(playerArray);
     for (let i = 0; i < players.length; i++) {
         const { timerError, success } = await resetPlayerTimer();
 
