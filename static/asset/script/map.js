@@ -47,7 +47,7 @@ export function changeScreenType(type) {
 export function clearMap() {
     map.setView(startLocation, 5);
     map.eachLayer((layer) => {
-        if (layer instanceof L.Marker || layer instanceof L.Polyline) {
+        if (layer instanceof L.Marker || layer instanceof L.Polyline || layer instanceof L.CircleMarker) {
             layer.remove();
         }
     });
