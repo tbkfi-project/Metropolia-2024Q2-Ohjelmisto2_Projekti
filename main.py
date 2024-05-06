@@ -3,7 +3,6 @@ from dotenv import load_dotenv
 from pathlib import Path
 from flask import Flask, request, send_file, Response
 import game.database as database
-import game.logic
 import game.functions
 import json
 
