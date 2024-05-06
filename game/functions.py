@@ -137,7 +137,7 @@ def is_time_over(end_time, added_time):
 
 
 def time_left(end_time, added_time):
-    how_much_time_left = end_time - get_time() + added_time
+    how_much_time_left = end_time - get_time() - added_time
     return how_much_time_left
 
 

@@ -427,7 +427,6 @@ async function uiResultScreen() {
 
     innerArray.sort(function(a, b){
         return b.score - a.score;})
-    console.log(responseArray)
 
     for (let s = 0; s < responseArray[0].length; s++) {
         const elementTableRowPlayer = document.createElement("tr");

@@ -10,6 +10,7 @@
   --colour-primary: #007bff;
   --colour-secondary: #6c757d;
   --colour-tertiary: #28a745;
+  --colour-quaternary: #037719;
 }
 
 
@@ -267,7 +268,7 @@ h4 {
 }
 
 .selected-parcel h4 {
-  color: var(--colour-tertiary) !important;
+  color: var(--colour-quaternary) !important;
 }
 
 .selected-parcel p {
@@ -305,6 +306,25 @@ h4 {
 
 .parcel-delivery-screen {
   padding: 3vh 4vh 3vh 4vh;
+}
+
+.name-and-timer {
+  font-size: 1.3em;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.timerDisplay  {
+  background-color: var(--colour-secondary);
+  border-radius: 20px;
+  padding: 1.3vh;
+}
+
+.nameDisplay  {
+  color: white;
+  background-color: var(--colour-secondary);
+  border-radius: 20px;
+  padding: 1.3vh;
 }
 
 .parcel-delivery-list li {

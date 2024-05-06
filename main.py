@@ -65,12 +65,12 @@ def endpoint_game(function_name):
                 if player.name == acting_player_name:
                     acting_player = player
 
-            player_used_time = acting_player.time_traveled
-
             game.functions.deliver_parcel(acting_player, chosen_parcel_index, chosen_airplane)
 
             game.functions.calculate_distances(acting_player)
             game.functions.calculate_flight_times(acting_player)
+
+            player_used_time = acting_player.time_traveled
 
             time_over = game.functions.is_time_over(turn_end_time, player_used_time)
             if time_over:
@@ -78,7 +78,9 @@ def endpoint_game(function_name):
                 json_body = {"game_over": True}
                 return Response(response=json.dumps(json_body), status=200, mimetype="application/json") # returns: "game_over" = true if the players time ran out before the selection
 
-            json_body = {"parcels": [vars(parcel) for parcel in acting_player.parcels_picked]}
+            time_left = game.functions.time_left(turn_end_time, player_used_time)
+
+            json_body = {"parcels": [vars(parcel) for parcel in acting_player.parcels_picked], "time_left": time_left}
             return Response(response=json.dumps(json_body), status=200, mimetype="application/json") # returns: "parcels" = all variables of all parcels that the inputted player has chosen IF the player chose the parcels in time
 
         case "highscores": # returns the top 10 players along with their scores from the database

@@ -7,6 +7,7 @@ let currentlySelectedParcelForDelivery = { // Contains data about currently open
     data: null,
 }
 let turnOver = false; // Changes to true when current player turn is over
+let time_left = 100
 
 /**
  * Remove currently active screen
@@ -110,6 +111,7 @@ async function deliverParcel(parcel, flightType) {
     }
 
     try {
+
         const { error, data } = await callParcelDeliveryEndpoint(playerName, playerParcels.indexOf(parcel), flightType);
 
         if (error) {
@@ -127,7 +129,7 @@ async function deliverParcel(parcel, flightType) {
             document.querySelector('#uiActive').remove(); // Remove current delivery screen so it can be regenerated with new data
 
             const parcels = data.parcels;
-            if (checkIfAllParcelsAreDelivered(parcels)) {
+            if (checkIfAllParcelsAreDelivered(parcels) && data.time_left > 0) {
                 alert('Toimitit kaikki paketit annetussa ajassa! Vuorosi loppuu.');
                 turnOver = true;
                 return;
@@ -226,6 +228,19 @@ function createDeliveryScreen(parcels) {
     const parcelDeliveryScreen = document.createElement('div');
     parcelDeliveryScreen.classList.add('parcel-delivery-screen');
 
+    const playerNameAndTimerDisplay = document.createElement('div')
+    playerNameAndTimerDisplay.classList.add('name-and-timer')
+    parcelDeliveryScreen.appendChild(playerNameAndTimerDisplay)
+
+    const playerNameDisplay = document.createElement('p')
+    playerNameDisplay.classList.add('nameDisplay')
+    const playerTimerDisplay = document.createElement('p')
+    playerTimerDisplay.classList.add('timerDisplay')
+    playerNameDisplay.innerText = `Vuorossa: ${playerName}`
+    playerTimerDisplay.innerText = `Aikaa jäljellä: ${time_left}`
+    playerNameAndTimerDisplay.appendChild(playerNameDisplay)
+    playerNameAndTimerDisplay.appendChild(playerTimerDisplay)
+
     const ulElement = document.createElement('ul');
     ulElement.classList.add('parcel-delivery-list');
     parcelDeliveryScreen.appendChild(ulElement);
@@ -243,10 +258,21 @@ function createDeliveryScreen(parcels) {
 
             ulElement.appendChild(liElement);
         }
+
     });
 
     parcelDeliveryScreenContainer.appendChild(parcelDeliveryScreen);
     uiInterface.appendChild(parcelDeliveryScreenContainer);
+
+    if (time_left > 50) {
+        document.querySelector(".timerDisplay").style.color = "springgreen";
+    } else if (time_left <= 50 && time_left > 25) {
+        document.querySelector(".timerDisplay").style.color = "yellow";
+    } else if (time_left <= 25 && time_left != 0) {
+        document.querySelector(".timerDisplay").style.color = "maroon";
+    } else if (time_left == 0) {
+        document.querySelector(".timerDisplay").style.color = "grey";
+    }
 }
 
 /**
@@ -256,7 +282,7 @@ function createDeliveryScreen(parcels) {
  * @param {Array<Number, Number} playerLocation Array with coordinates [Latitude, Longitude] 
  */
 function start(nameOfThePlayer, parcels, playerLocation) {
-    alert(`${nameOfThePlayer}, aloita pelaus`);
+    alert(`${nameOfThePlayer}, on vuorosi toimittaa paketit!`);
     playerParcels = parcels; // Store player parcels
     playerName = nameOfThePlayer;
     clearActiveScreen(); // Clear active screen
@@ -269,6 +295,46 @@ function start(nameOfThePlayer, parcels, playerLocation) {
     Map.changeScreenType('game'); // Change map screen type
 
     createDeliveryScreen(playerParcels); // Create and show delivery screen
+
+    clock()
+}
+
+async function clock() {
+    const timer = setInterval(async () => {
+
+        if (turnOver) {
+            clearInterval(timer)
+        }
+
+        const response = await fetch(
+            `http://127.0.0.1:3333/game/time_left?player=${playerName}`)
+        const responseJSON = await response.json()
+        time_left = Math.floor(responseJSON['time_left'])
+
+        if (time_left < 0 && !turnOver) {
+            time_left = 0
+            alert('Aikasi loppui kesken toimituksen! Hävisit pelin!');
+            turnOver = true;
+            fetch(`http://127.0.0.1:3333/game/game_over?player=${playerName}`);
+            clearInterval(timer);
+        }
+
+        if (time_left > 50) {
+                document.querySelector(".timerDisplay").style.color = "springgreen";
+            } else if (time_left <= 50 && time_left > 25) {
+                document.querySelector(".timerDisplay").style.color = "yellow";
+            } else if (time_left <= 25 && time_left != 0) {
+                document.querySelector(".timerDisplay").style.color = "maroon";
+            } else if (time_left == 0) {
+                document.querySelector(".timerDisplay").style.color = "grey";
+            }
+
+        const playerNameDisplay = document.querySelector(".nameDisplay")
+        const playerTimerDisplay = document.querySelector(".timerDisplay")
+        playerNameDisplay.textContent = `Vuorossa: ${playerName}`
+        playerTimerDisplay.textContent = `Aikaa jäljellä:  ${time_left}`
+
+    }, 1000)
 }
 
 /**
@@ -305,7 +371,7 @@ async function getPlayerParcels(playerName) {
 async function resetPlayerTimer() {
     try {
         const response = await fetch('http://127.0.0.1:3333/game/start_new_time?seconds=100');
-
+        time_left = 100
         if (!response.ok) {
             return {
                 error: Error(`Response was not 200. Returned response code was: ${response.status}`),
@@ -332,7 +398,7 @@ async function turnWaiter() {
     return new Promise(resolve => {
         const interval = setInterval(() => {
             if (turnOver) {
-                turnOver = false;
+                setTimeout(() => turnOver = false,1050);
                 clearInterval(interval);
                 resolve();
             }

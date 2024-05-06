@@ -52,7 +52,7 @@ export async function turnStart(data, i) {
     currentPlayer = i;
     currentPlayerName = gameData["players"][i]["name"];
 
-    alert(currentPlayerName + ", vuorosi on alkamassa!");
+    alert(currentPlayerName + ", on vuorosi valita paketit!");
     const response = await fetch("http://127.0.0.1:3333/game/start_new_time?seconds=30");
     const responseJSON = await response.json();
     const currentTurnStart = responseJSON["start_time"];
@@ -100,7 +100,7 @@ export async function turnStart(data, i) {
         const elementListItem = document.createElement("li");
         elementListItem.setAttribute("id", p);
         const elementHeading3 = document.createElement("h4");
-        elementHeading3.textContent = `${parcelItem}: ${parcelHeft}`;
+        elementHeading3.textContent = `${parcelItem}. Paino: ${parcelHeft} kg`;
         const elementParagraph = document.createElement("p");
         elementParagraph.textContent = parcelInfo;
 
