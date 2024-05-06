@@ -14,12 +14,13 @@ async function turnEnd(currentTurnStart, currentTurnEnd, currentTurnLimit) {
             console.log("turn elapsed:", Date.now() - currentTurnStart * 1000)
 
             // Turn clock
-            document.querySelector("#TurnClock").textContent = Math.floor((currentTurnEnd * 1000 - Date.now()) / 1000);
-            if (document.querySelector("#TurnClock").textContent <= 20 && document.querySelector("#TurnClock").textContent > 10) {
+            let timeNow = Math.floor((currentTurnEnd * 1000 - Date.now()) / 1000);
+            document.querySelector("#TurnClock").textContent = "Aikaa jäljellä: " + timeNow
+            if (timeNow <= 20 && timeNow > 10) {
                 document.querySelector("#TurnClock").style.color = "yellow";
-            } else if (document.querySelector("#TurnClock").textContent <= 10 && document.querySelector("#TurnClock").textContent != 0) {
+            } else if (timeNow <= 10 && timeNow != 0) {
                 document.querySelector("#TurnClock").style.color = "red";
-            } else if (document.querySelector("#TurnClock").textContent == 0) {
+            } else if (timeNow == 0) {
                 document.querySelector("#TurnClock").style.color = "grey";
             }
 
@@ -74,14 +75,14 @@ export async function turnStart(data, i) {
     const elementClock = document.createElement("section");
     elementClock.setAttribute("id", "TurnClock");
     const elementClockText = document.createElement("p");
-    elementClockText.textContent = currentTurnLimit;
+    elementClockText.textContent = "Aikaa jäljellä: " + currentTurnLimit;
 
     elementContainer.appendChild(elementHeading1);
     elementContainer.appendChild(elementHeading2);
 
     elementContainer.appendChild(elementClock);
     elementClock.appendChild(elementClockText);
-    elementClock.style.color = "green";
+    elementClock.style.color = "SpringGreen";
 
     elementContainer.appendChild(elementOrderedList);
     elementSection.appendChild(elementContainer);

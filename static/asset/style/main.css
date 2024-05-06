@@ -153,7 +153,7 @@ h2 {
 }
 
 .highscore-return-btn:hover {
-  color: red;
+  color: #af0202;
   background-color: var(--colour-grey) !important;
 }
 
@@ -190,7 +190,7 @@ h2 {
 }
 
 .ButtonSelectionBack {
-  background: red !important;
+  background: #af0202 !important;
 }
 
 .ButtonSelectionPlayerAdd:hover {
@@ -355,8 +355,9 @@ h4 {
 }
 
 .highscore-return-btn:hover {
-  color: red;
+  color: SpringGreen;
   background-color: var(--colour-grey) !important;
+  font-weight: 550;
 }
 
 /* Default settings for elements */

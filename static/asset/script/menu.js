@@ -91,7 +91,7 @@ export function uiMainMenu() {
 
     const elementListItem1 = document.createElement("li");
     const elementButton1 = document.createElement("button");
-    elementButton1.textContent = "uusi peli";
+    elementButton1.textContent = "Uusi peli";
     elementButton1.setAttribute("class", "ButtonMenuStartNew");
 
     elementListItem1.appendChild(elementButton1);
@@ -100,7 +100,7 @@ export function uiMainMenu() {
 
     const elementListItem2 = document.createElement("li");
     const elementButton2 = document.createElement("button");
-    elementButton2.textContent = "pisteet";
+    elementButton2.textContent = "Pisteet";
     elementButton2.setAttribute("class", "ButtonMenuStartHiscore");
 
     elementListItem2.appendChild(elementButton2);
@@ -124,20 +124,20 @@ async function uiHiscores() {
     const elementContainer = document.createElement('div');
     elementContainer.classList.add('container');
     const elementHeading = document.createElement("h2");
-    elementHeading.textContent = "Hiscores";
+    elementHeading.innerHTML = "<b>Hiscores</b>";
     const elementTable = document.createElement("table");
     elementTable.classList.add('highscore-table');
     const elementTableRow = document.createElement("tr");
     const elementTableHeader1 = document.createElement("th");
-    elementTableHeader1.textContent = "sija";
+    elementTableHeader1.innerHTML = "<b>Sija</b>";
     const elementTableHeader2 = document.createElement("th");
-    elementTableHeader2.textContent = "nimimerkki";
+    elementTableHeader2.innerHTML = "<b>Nimimerkki</b>";
     const elementTableHeader3 = document.createElement("th");
-    elementTableHeader3.textContent = "pisteet";
+    elementTableHeader3.innerHTML = "<b>Pisteet</b>";
     const elementTableHeader4 = document.createElement("th");
-    elementTableHeader4.textContent = "sessio";
+    elementTableHeader4.innerHTML = "<b>Sessio</b>";
     const elementButton = document.createElement("button");
-    elementButton.textContent = "palaa valikkoon";
+    elementButton.textContent = "Palaa päävalikkoon";
     elementButton.classList.add('highscore-return-btn');
 
     elementContainer.appendChild(elementHeading);
@@ -155,7 +155,29 @@ async function uiHiscores() {
     for (let s = 0; s < responseJSON["highscores"].length; s++) {
         const elementTableRowPlayer = document.createElement("tr");
         const elementTableData1 = document.createElement("td");
-        elementTableData1.textContent = s + 1;
+
+        switch (s) {
+        case 0:
+            elementTableData1.textContent = "🥇 " + (s + 1);
+            elementTableData1.style.position = "relative";
+            elementTableData1.style.left = "-30px"
+            elementTableRowPlayer.style.color = "gold";
+            break;
+        case 1:
+            elementTableData1.textContent = "🥈 " + (s + 1);
+            elementTableData1.style.position = "relative";
+            elementTableData1.style.left = "-30px";
+            elementTableRowPlayer.style.color = "silver";
+            break;
+        case 2:
+            elementTableData1.textContent = "🥉 " + (s + 1);
+            elementTableData1.style.position = "relative";
+            elementTableData1.style.left = "-30px";
+            elementTableRowPlayer.style.color = "#CD7F32";
+            break;
+        default:
+            elementTableData1.textContent = s + 1 + " ";}
+
         const elementTableData2 = document.createElement("td");
         elementTableData2.textContent = responseJSON["highscores"][s]["name"];
         const elementTableData3 = document.createElement("td");
@@ -209,7 +231,7 @@ export function uiPlayerSelection() {
 
     const elementListItem2 = document.createElement("li");
     const elementButton1 = document.createElement("button");
-    elementButton1.textContent = "lisää pelaaja";
+    elementButton1.textContent = "Lisää pelaaja";
     elementButton1.setAttribute("class", "ButtonSelectionPlayerAdd");
 
     elementListItem2.appendChild(elementButton1);
@@ -218,7 +240,7 @@ export function uiPlayerSelection() {
 
     const elementListItem3 = document.createElement("li");
     const elementButton2 = document.createElement("button");
-    elementButton2.textContent = "aloita peli";
+    elementButton2.textContent = "Aloita peli";
     elementButton2.setAttribute("class", "ButtonSelectionStartGame");
 
     elementListItem3.appendChild(elementButton2);
@@ -227,7 +249,7 @@ export function uiPlayerSelection() {
 
     const elementListItem4 = document.createElement("li");
     const elementButton3 = document.createElement("button");
-    elementButton3.textContent = "palaa valikkoon";
+    elementButton3.textContent = "Palaa päävalikkoon";
     elementButton3.setAttribute("class", "ButtonSelectionBack");
 
     elementListItem4.appendChild(elementButton3);
@@ -370,22 +392,22 @@ async function uiResultScreen() {
     const elementContainer = document.createElement('div');
     elementContainer.classList.add('container');
     const elementHeading = document.createElement("h2");
-    elementHeading.textContent = "Tulokset";
+    elementHeading.innerHTML = "<b>Tulokset</b>";
     const elementTable = document.createElement("table");
     elementTable.classList.add('end-screen-table');
     const elementTableRow = document.createElement("tr");
     const elementTableHeader1 = document.createElement("th");
-    elementTableHeader1.textContent = "nimimerkki";
+    elementTableHeader1.innerHTML = "<b>Nimimerkki</b>";
     const elementTableHeader2 = document.createElement("th");
-    elementTableHeader2.textContent = "pisteet";
+    elementTableHeader2.innerHTML = "<b>Pisteet</b>";
     const elementTableHeader3 = document.createElement("th");
-    elementTableHeader3.textContent = "co2";
+    elementTableHeader3.innerHTML = "<b>Co2</b>";
     const elementTableHeader4 = document.createElement("th");
-    elementTableHeader4.textContent = "distance traveled (km)";
+    elementTableHeader4.innerHTML = "<b>Matka (km)</b>";
     const elementTableHeader5 = document.createElement("th");
-    elementTableHeader5.textContent = "time traveled (s)";
+    elementTableHeader5.innerHTML = "<b>Aika (s)</b>";
     const elementButton = document.createElement("button");
-    elementButton.textContent = "palaa valikkoon";
+    elementButton.textContent = "Palaa valikkoon";
     elementButton.classList.add('end-screen-return-btn');
 
     elementContainer.appendChild(elementHeading);
@@ -400,27 +422,53 @@ async function uiResultScreen() {
     elementSection.appendChild(elementContainer);
     uiInterface.appendChild(elementSection);
 
+    const responseArray = Object.values(responseJSON);
+    const innerArray = responseArray[0]
 
-    for (let s = 0; s < responseJSON["players"].length; s++) {
+    innerArray.sort(function(a, b){
+        return b.score - a.score;})
+
+    for (let s = 0; s < responseArray[0].length; s++) {
         const elementTableRowPlayer = document.createElement("tr");
         const elementTableData1 = document.createElement("td");
-        elementTableData1.textContent = responseJSON["players"][s]["name"];
+        elementTableData1.textContent = responseArray[0][s]["name"];
 
-        if (!responseJSON["players"]["gameover"]) {
+        if (!responseArray[0][s]["gameover"]) {
             const elementTableData2 = document.createElement("td");
-            elementTableData2.textContent = responseJSON["players"][s]["score"];
+            elementTableData2.textContent = responseArray[0][s]["score"];
             const elementTableData3 = document.createElement("td");
-            elementTableData3.textContent = Math.ceil(responseJSON["players"][s]["co2_produced"]);
+            elementTableData3.textContent = Math.ceil(responseArray[0][s]["co2_produced"]);
             const elementTableData4 = document.createElement("td");
-            elementTableData4.textContent = Math.ceil(responseJSON["players"][s]["distance_traveled"]);
+            elementTableData4.textContent = Math.ceil(responseArray[0][s]["distance_traveled"]);
             const elementTableData5 = document.createElement("td");
-            elementTableData5.textContent = Math.ceil(responseJSON["players"][s]["time_traveled"]);
+            elementTableData5.textContent = Math.ceil(responseArray[0][s]["time_traveled"]);
 
             elementTableRowPlayer.appendChild(elementTableData1);
             elementTableRowPlayer.appendChild(elementTableData2);
             elementTableRowPlayer.appendChild(elementTableData3);
             elementTableRowPlayer.appendChild(elementTableData4);
             elementTableRowPlayer.appendChild(elementTableData5);
+
+            switch (s) {
+            case 0:
+                elementTableRowPlayer.style.color = "gold";
+                elementTableData1.textContent = "🥇 " + (s + 1);
+                elementTableData1.style.position = "relative";
+                elementTableData1.style.left = "-30px"
+                break;
+            case 1:
+                elementTableRowPlayer.style.color = "silver";
+                elementTableData1.textContent = "🥈 " + (s + 1);
+                elementTableData1.style.position = "relative";
+                elementTableData1.style.left = "-30px"
+                break;
+            case 2:
+                elementTableRowPlayer.style.color = "#CD7F32";
+                elementTableData1.textContent = "🥉 " + (s + 1);
+                elementTableData1.style.position = "relative";
+                elementTableData1.style.left = "-30px"
+                break;}
+
         } else {
             const elementTableData2 = document.createElement("td");
             elementTableData2.textContent = "GAME OVER";
