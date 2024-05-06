@@ -427,11 +427,34 @@ async function uiResultScreen() {
 
     innerArray.sort(function(a, b){
         return b.score - a.score;})
+    console.log(responseArray)
 
     for (let s = 0; s < responseArray[0].length; s++) {
         const elementTableRowPlayer = document.createElement("tr");
         const elementTableData1 = document.createElement("td");
-        elementTableData1.textContent = responseArray[0][s]["name"];
+
+            switch (s) {
+            case 0:
+                elementTableRowPlayer.style.color = "gold";
+                elementTableData1.textContent = "🥇 " + responseArray[0][s]["name"];
+                elementTableData1.style.position = "relative";
+                elementTableData1.style.left = "-30px"
+                break;
+            case 1:
+                elementTableRowPlayer.style.color = "silver";
+                elementTableData1.textContent = "🥈 " + responseArray[0][s]["name"];
+                elementTableData1.style.position = "relative";
+                elementTableData1.style.left = "-30px"
+                break;
+            case 2:
+                elementTableRowPlayer.style.color = "#CD7F32";
+                elementTableData1.textContent = "🥉 " + responseArray[0][s]["name"];
+                elementTableData1.style.position = "relative";
+                elementTableData1.style.left = "-30px"
+                break;
+            default:
+                elementTableData1.textContent = responseArray[0][s]["name"];
+                break;}
 
         if (!responseArray[0][s]["gameover"]) {
             const elementTableData2 = document.createElement("td");
@@ -448,26 +471,6 @@ async function uiResultScreen() {
             elementTableRowPlayer.appendChild(elementTableData3);
             elementTableRowPlayer.appendChild(elementTableData4);
             elementTableRowPlayer.appendChild(elementTableData5);
-
-            switch (s) {
-            case 0:
-                elementTableRowPlayer.style.color = "gold";
-                elementTableData1.textContent = "🥇 " + (s + 1);
-                elementTableData1.style.position = "relative";
-                elementTableData1.style.left = "-30px"
-                break;
-            case 1:
-                elementTableRowPlayer.style.color = "silver";
-                elementTableData1.textContent = "🥈 " + (s + 1);
-                elementTableData1.style.position = "relative";
-                elementTableData1.style.left = "-30px"
-                break;
-            case 2:
-                elementTableRowPlayer.style.color = "#CD7F32";
-                elementTableData1.textContent = "🥉 " + (s + 1);
-                elementTableData1.style.position = "relative";
-                elementTableData1.style.left = "-30px"
-                break;}
 
         } else {
             const elementTableData2 = document.createElement("td");
