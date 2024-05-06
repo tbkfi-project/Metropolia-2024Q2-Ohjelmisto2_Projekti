@@ -318,9 +318,11 @@ async function clock() {
             fetch(`http://127.0.0.1:3333/game/game_over?player=${playerName}`);
             clearInterval(timer);
         }
+        try {
 
-        if (time_left > 50) {
-                document.querySelector(".timerDisplay").style.color = "springgreen";
+            if (time_left > 50) {
+                document.querySelector(
+                    ".timerDisplay").style.color = "springgreen";
             } else if (time_left <= 50 && time_left > 25) {
                 document.querySelector(".timerDisplay").style.color = "yellow";
             } else if (time_left <= 25 && time_left != 0) {
@@ -329,11 +331,13 @@ async function clock() {
                 document.querySelector(".timerDisplay").style.color = "grey";
             }
 
-        const playerNameDisplay = document.querySelector(".nameDisplay")
-        const playerTimerDisplay = document.querySelector(".timerDisplay")
-        playerNameDisplay.textContent = `Vuorossa: ${playerName}`
-        playerTimerDisplay.textContent = `Aikaa jäljellä:  ${time_left}`
-
+            const playerNameDisplay = document.querySelector(".nameDisplay")
+            const playerTimerDisplay = document.querySelector(".timerDisplay")
+            playerNameDisplay.textContent = `Vuorossa: ${playerName}`
+            playerTimerDisplay.textContent = `Aikaa jäljellä:  ${time_left}`
+        } catch (r) {
+            console.log(r)
+        }
     }, 1000)
 }
 
