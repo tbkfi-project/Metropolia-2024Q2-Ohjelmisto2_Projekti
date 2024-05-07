@@ -380,6 +380,18 @@ h4 {
   font-weight: 550;
 }
 
+.instructions-return-btn {
+  all: unset;
+  margin-top: 2vh;
+  padding: 1vh;
+  width: 15vw;
+  font-size: 1.4em;
+  text-align: center;
+  color: var(--colour-white);
+  background: var(--colour-grey);
+  border-radius: 10px;
+}
+
 /* Default settings for elements */
 button {
   width: 8rem;

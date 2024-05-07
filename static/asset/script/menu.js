@@ -106,9 +106,18 @@ export function uiMainMenu() {
     elementListItem2.appendChild(elementButton2);
     elementSectionUnorderedList.appendChild(elementListItem2);
 
+    const elementListItem3 = document.createElement("li");
+    const elementButton3 = document.createElement("button");
+    elementButton3.textContent = "Ohjeet";
+    elementButton3.setAttribute("class", "ButtonMenuStartInstruction");
+
+    elementListItem3.appendChild(elementButton3);
+    elementSectionUnorderedList.appendChild(elementListItem3);
+
     // Add DOM Eeventlisteners.
     elementButton1.addEventListener('click', uiPlayerSelection);
     elementButton2.addEventListener('click', uiHiscores);
+    elementButton3.addEventListener('click', uiInstructions);
 }
 
 // UI: Hiscores
@@ -494,4 +503,43 @@ async function uiResultScreen() {
     elementButton.addEventListener("click", () => {
         uiMainMenu();
     });
+}
+
+// UI: Instructions
+function uiInstructions() {
+    uiActiveClear();
+
+    // Create DOM elements.
+    const elementSection = document.createElement("section");
+    elementSection.setAttribute("id", "uiActive");
+    const elementContainer = document.createElement('div');
+    elementContainer.classList.add('container');
+    const elementHeading = document.createElement("h2");
+    elementHeading.textContent = "Ohjeet";
+    const elementParagraph = document.createElement("p");
+    elementParagraph.innerHTML = "Pelin tavoitteena on toimittaa kaikki pelivuoron alussa \
+                                    valitut paketit niiden kohteeseen, ennen määräajan loppumista.<br><br> \
+                                    Peliä voi pelata kerrallaan yksi tai useampi henkilö. Suoritus pisteytetään pelaajan hiilidioksidipäästöjen mukaan.\
+                                    Päästöjen suuruuteen vaikuttaa: tavaranimikkeen tyyppi, kuljettu matka ja kuljetusmuoto.";
+    const elementButton = document.createElement("button");
+    elementButton.setAttribute("class", "instructions-return-btn");
+    elementButton.textContent = "Palaa valikkoon";
+
+    uiInterface.appendChild(elementSection);
+    elementSection.appendChild(elementContainer);
+    elementContainer.appendChild(elementHeading);
+    elementContainer.appendChild(elementParagraph);
+    elementContainer.appendChild(elementButton);
+
+    // Add DOM Event Listeners
+    elementButton.addEventListener("click", () => {
+        uiMainMenu();
+    });
+
+    // Style DOM elements
+    elementHeading.style.padding = "2rem";
+    elementParagraph.style.color = "white";
+    elementParagraph.style.fontSize = "1.75rem";
+    elementParagraph.style.padding = "2rem";
+    elementButton.style.margin = "2rem";
 }
