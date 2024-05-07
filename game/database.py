@@ -4,6 +4,7 @@ from mysql.connector.connection import MySQLConnectionAbstract
 from mysql.connector import Error as DB_error
 from dotenv import load_dotenv
 from pathlib import Path
+from . import format
 
 connection: MySQLConnectionAbstract
 
@@ -109,7 +110,7 @@ def fetch_last_game_id_from_db() -> int | DB_error:
         return error
 
 
-def insert_new_player_scores_in_to_db(players: list[dict]) -> None | KeyError | DB_error:
+def insert_new_player_scores_in_to_db(players: list) -> None | KeyError | DB_error:
     """
     Insert new player scores in to the database
 
@@ -133,7 +134,7 @@ def insert_new_player_scores_in_to_db(players: list[dict]) -> None | KeyError | 
         current_game_id = last_game_id + 1  # If the last game_id fetch was successful then add +1 to it
         for player in players:
             sql = (f"INSERT INTO highscore (game_id, player_name, player_highscore) "
-                   f"VALUES ({current_game_id}, '{player['name']}', {player['score']})")
+                   f"VALUES ({current_game_id}, '{player.name}', {player.score})")
 
             cursor.execute(sql)
 
@@ -159,12 +160,37 @@ def fetch_player_highscores_from_db(count: int) -> list | DB_error:
     sql = f"SELECT game_id, player_name, player_highscore FROM highscore ORDER BY player_highscore DESC LIMIT {count}"
 
     cursor = connection.cursor()
+    list_of_highscores = []
 
     try:
         cursor.execute(sql)
         result = cursor.fetchall()
+        for player in result:
+            highscore_value = format.HighscoreValue(player[0], player[1], player[2])
+            list_of_highscores.append(highscore_value)
 
-        return result
+        return list_of_highscores
 
     except DB_error as error:
         return error
+
+
+def connection_check() -> bool | DB_error:
+    """
+    Checks if the connection to the database is working
+
+    :returns: boolean
+    """
+
+    sql = "SELECT id WHERE id = 62 FROM airport"
+
+    cursor = connection.cursor()
+
+    try:
+        cursor.execute(sql)
+        result = cursor.fetchone()
+
+        return True
+
+    except DB_error as error:
+        return False
