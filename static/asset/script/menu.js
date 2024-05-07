@@ -29,7 +29,7 @@ export function uiPanel() {
     const elementListItem1 = document.createElement("li");
     elementListItem1.setAttribute("id", "GameLogo");
     const elementListItem1Img = document.createElement("img");
-    elementListItem1Img.setAttribute("src", "/static/asset/parcel.png");
+    elementListItem1Img.setAttribute("src", "/static/asset/favicon.png");
     elementListItem1Img.setAttribute("alt", "Pakettipilotti logo image.");
 
     elementListItem1.appendChild(elementListItem1Img);
@@ -80,9 +80,14 @@ export function uiMainMenu() {
     elementContainer.classList.add('container');
     const elementSectionHeading = document.createElement("h2");
     elementSectionHeading.textContent = "Päävalikko";
+    const gameLogo = document.createElement("img")
+    gameLogo.setAttribute("src", "/static/asset/parcel.png");
+    gameLogo.setAttribute("alt", "Pakettipilotti logo image.");
+    gameLogo.classList.add('logo');
     const elementSectionUnorderedList = document.createElement("ul");
     elementSectionUnorderedList.classList.add('main-button-list')
 
+    elementContainer.appendChild(gameLogo);
     elementContainer.appendChild(elementSectionHeading);
     elementContainer.appendChild(elementSectionUnorderedList);
     elementSection.appendChild(elementContainer)
