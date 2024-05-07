@@ -182,7 +182,7 @@ def connection_check() -> bool | DB_error:
     :returns: boolean
     """
 
-    sql = "SELECT MAX(game_id) FROM highscore"
+    sql = "SELECT id WHERE id = 62 FROM airport"
 
     cursor = connection.cursor()
 
