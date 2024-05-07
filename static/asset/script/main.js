@@ -3,7 +3,7 @@
 import * as Map from './map.js'
 import * as Menu from './menu.js'
 
-export const versionNumber = "dev"
+export const versionNumber = "r1"
 
 
 // Initialise Application
